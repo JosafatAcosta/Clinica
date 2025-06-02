@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico del Trastorno del Espectro Autista (TEA) - DSM-5-TR</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --accent: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: var(--dark);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: var(--secondary);
+        }
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #eee;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+            transition: all 0.3s;
+        }
+        .tab:hover {
+            background-color: #ddd;
+        }
+        .tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .criteria-container {
+            background-color: white;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .criteria-title {
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        .instrument-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .instrument-card:hover {
+            transform: translateY(-3px);
+        }
+        .instrument-name {
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .quiz-container {
+            margin-top: 30px;
+        }
+        .quiz-levels {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .quiz-level {
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .quiz-level:hover {
+            opacity: 0.9;
+        }
+        .quiz-level.inicial {
+            background-color: #3498db;
+            color: white;
+        }
+        .quiz-level.medio {
+            background-color: #f39c12;
+            color: white;
+        }
+        .quiz-level.superior {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .quiz-level.active {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .quiz-question {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .quiz-options {
+            margin-top: 10px;
+        }
+        .quiz-option {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            background-color: #e9ecef;
+        }
+        .quiz-option.selected {
+            background-color: var(--primary);
+            color: white;
+        }
+        .quiz-option.correct {
+            background-color: var(--secondary);
+            color: white;
+        }
+        .quiz-option.incorrect {
+            background-color: var(--accent);
+            color: white;
+        }
+        .quiz-feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .quiz-feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        .quiz-feedback.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        .quiz-results {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: none;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .btn-check {
+            background-color: var(--secondary);
+            margin-top: 10px;
+        }
+        .btn-check:hover {
+            background-color: #27ae60;
+        }
+        .btn-reset {
+            background-color: var(--accent);
+        }
+        .btn-reset:hover {
+            background-color: #c0392b;
+        }
+        .references {
+            margin-top: 50px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .hidden {
+            display: none;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Diagnóstico del Trastorno del Espectro Autista (TEA)</h1>
+        <p>Según los criterios del DSM-5-TR y herramientas de evaluación</p>
+    </header>
+
+    <div class="tab-container">
+        <button class="tab active" onclick="openTab(event, 'criterios')">Criterios DSM-5-TR</button>
+        <button class="tab" onclick="openTab(event, 'instrumentos')">Instrumentos</button>
+        <button class="tab" onclick="openTab(event, 'evaluacion')">Evaluación</button>
+    </div>
+
+    <div id="criterios" class="tab-content active">
+        <h2>Criterios diagnósticos del TEA según el DSM-5-TR</h2>
+        
+        <div class="criteria-container">
+            <div class="criteria-title">A. Déficits en comunicación e interacción social (≥ 3 de los siguientes):</div>
+            <ol>
+                <li>Déficits en reciprocidad socioemocional (ej., dificultad para iniciar o mantener conversaciones).</li>
+                <li>Déficits en conductas comunicativas no verbales (ej., contacto visual reducido, gestos anormales).</li>
+                <li>Dificultad para desarrollar/mantener relaciones (ej., ausencia de interés en pares).</li>
+            </ol>
+        </div>
+
+        <div class="criteria-container">
+            <div class="criteria-title">B. Patrones restrictivos/repetitivos de comportamiento (≥ 2 de los siguientes):</div>
+            <ol>
+                <li>Movimientos o uso repetitivo de objetos (ej., estereotipias, ecolalia).</li>
+                <li>Insistencia en la monotonía (ej., resistencia a cambios, rutinas rígidas).</li>
+                <li>Intereses restrictivos/fijos (ej., hiperfocalización en temas específicos).</li>
+                <li>Hiper o hiporeactividad sensorial (ej., indiferencia al dolor, fascinación por luces).</li>
+            </ol>
+        </div>
+
+        <div class="criteria-container">
+            <div class="criteria-title">Otros criterios:</div>
+            <p><strong>C.</strong> Síntomas desde la infancia temprana (aunque pueden manifestarse plenamente más tarde).</p>
+            <p><strong>D.</strong> Alteración clínicamente significativa en áreas sociales, ocupacionales u otras.</p>
+            <p><strong>E.</strong> No explicado mejor por discapacidad intelectual o retraso global del desarrollo.</p>
+        </div>
+    </div>
+
+    <div id="instrumentos" class="tab-content">
+        <h2>Instrumentos para el diagnóstico de TEA</h2>
+        
+        <div class="instrument-card">
+            <div class="instrument-name">ADOS-2 (Autism Diagnostic Observation Schedule, 2ª edición)</div>
+            <p><strong>Uso:</strong> Escala estandarizada con actividades estructuradas para evaluar comunicación, juego e interacción social.</p>
+            <p><strong>Edad:</strong> Desde 12 meses hasta adultos.</p>
+            <p><strong>Características:</strong> Considerado el "estándar de oro" para el diagnóstico de TEA.</p>
+        </div>
+
+        <div class="instrument-card">
+            <div class="instrument-name">ADI-R (Autism Diagnostic Interview-Revised)</div>
+            <p><strong>Uso:</strong> Entrevista semiestructurada a padres para evaluar conductas asociadas al TEA.</p>
+            <p><strong>Edad:</strong> A partir de 2 años (evalúa conductas desde los 4-5 años).</p>
+            <p><strong>Características:</strong> Evalúa lenguaje/comunicación, interacción social y comportamientos restringidos/repetitivos.</p>
+        </div>
+
+        <div class="instrument-card">
+            <div class="instrument-name">M-CHAT-R/F (Modified Checklist for Autism in Toddlers, Revised with Follow-Up)</div>
+            <p><strong>Uso:</strong> Cuestionario de screening para niños pequeños.</p>
+            <p><strong>Edad:</strong> 16 a 30 meses.</p>
+            <p><strong>Características:</strong> 20 preguntas a padres, con seguimiento para positivos.</p>
+        </div>
+
+        <div class="instrument-card">
+            <div class="instrument-name">Escalas complementarias</div>
+            <p><strong>Evaluación cognitiva:</strong> WISC-V, WPPSI-IV</p>
+            <p><strong>Evaluación del lenguaje:</strong> PLS-5, CELF-5</p>
+            <p><strong>Evaluación sensorial:</strong> Perfil Sensorial de Dunn, SPM</p>
+        </div>
+    </div>
+
+    <div id="evaluacion" class="tab-content">
+        <h2>Evaluación de conocimientos sobre TEA</h2>
+        <p>Selecciona tu nivel de conocimiento para realizar la evaluación correspondiente:</p>
+        
+        <div class="quiz-levels">
+            <div class="quiz-level inicial" onclick="selectQuizLevel('inicial')">Inicial</div>
+            <div class="quiz-level medio" onclick="selectQuizLevel('medio')">Medio</div>
+            <div class="quiz-level superior" onclick="selectQuizLevel('superior')">Superior</div>
+        </div>
+
+        <div id="quiz-inicial" class="quiz-container hidden">
+            <h3>Nivel Inicial</h3>
+            
+            <div class="quiz-question" data-correct="b">
+                <p>1. ¿Cuál de los siguientes es un criterio del DSM-5-TR para el diagnóstico de TEA?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) Fiebre alta persistente</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) Déficits en comunicación social</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) Dolores de cabeza frecuentes</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) Todos los anteriores</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>b) Déficits en comunicación social</strong>. Este es uno de los dos criterios principales para el diagnóstico de TEA según el DSM-5-TR.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <div class="quiz-question" data-correct="a">
+                <p>2. ¿Qué instrumento se utiliza comúnmente para evaluar a niños pequeños (16-30 meses) en riesgo de TEA?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) M-CHAT-R/F</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) ADI-R</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) WISC-V</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) Ninguno de los anteriores</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>a) M-CHAT-R/F</strong>. Este cuestionario está diseñado específicamente para screening de TEA en niños pequeños.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <div class="quiz-question" data-correct="c">
+                <p>3. ¿Qué profesional NO suele formar parte del equipo multidisciplinar para diagnosticar TEA?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) Psicólogo</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) Neurólogo</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) Chef</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) Psiquiatra</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>c) Chef</strong>. El diagnóstico de TEA requiere profesionales de la salud mental y desarrollo, no de gastronomía.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <button class="btn btn-reset" onclick="resetQuiz('inicial')">Reiniciar evaluación</button>
+            <div class="quiz-results"></div>
+        </div>
+
+        <div id="quiz-medio" class="quiz-container hidden">
+            <h3>Nivel Medio</h3>
+            
+            <div class="quiz-question" data-correct="b">
+                <p>1. Según el DSM-5-TR, ¿cuántos síntomas del criterio B (patrones restrictivos/repetitivos) se requieren para el diagnóstico de TEA?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) 1</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) 2</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) 3</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) 4</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>b) 2</strong>. El DSM-5-TR requiere al menos 2 síntomas del criterio B para el diagnóstico de TEA.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <div class="quiz-question" data-correct="d">
+                <p>2. ¿Cuál de estos NO es un instrumento específico para evaluar TEA?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) ADOS-2</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) ADI-R</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) M-CHAT-R/F</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) MMPI-2</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>d) MMPI-2</strong>. El MMPI-2 es un test de personalidad para adultos, no específico para TEA.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <div class="quiz-question" data-correct="a">
+                <p>3. ¿Qué cambio importante introdujo el DSM-5 respecto al diagnóstico de TEA?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) Unificó los subtipos en un único espectro</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) Eliminó el requisito de síntomas en la infancia</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) Añadió requisitos de pruebas de laboratorio</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) Redujo el número de criterios necesarios</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>a) Unificó los subtipos en un único espectro</strong>. El DSM-5 eliminó distinciones como el síndrome de Asperger, agrupándolos todos bajo TEA.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <button class="btn btn-reset" onclick="resetQuiz('medio')">Reiniciar evaluación</button>
+            <div class="quiz-results"></div>
+        </div>
+
+        <div id="quiz-superior" class="quiz-container hidden">
+            <h3>Nivel Superior</h3>
+            
+            <div class="quiz-question" data-correct="c">
+                <p>1. Un niño de 4 años muestra ecolalia, alineación obsesiva de juguetes y evitación del contacto visual, pero tiene buen desarrollo del lenguaje formal. ¿Qué instrumento sería MÁS adecuado para evaluarlo?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) M-CHAT-R/F</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) Escala de Wechsler</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) ADOS-2</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) Ninguno de los anteriores</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>c) ADOS-2</strong>. El ADOS-2 es el instrumento más completo para evaluar TEA en este caso, especialmente porque el M-CHAT-R/F es para niños más pequeños.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <div class="quiz-question" data-correct="b">
+                <p>2. Según el DSM-5-TR, ¿cuál de estos síntomas pertenece al criterio A (déficits en comunicación social)?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) Fascinación por las luces intermitentes</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) Dificultad para ajustar el comportamiento al contexto social</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) Movimientos estereotipados de las manos</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) Insistencia en rutinas específicas</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>b) Dificultad para ajustar el comportamiento al contexto social</strong>. Las otras opciones pertenecen al criterio B (patrones restrictivos/repetitivos).
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <div class="quiz-question" data-correct="d">
+                <p>3. ¿Qué evaluación complementaria sería MÁS relevante para un niño con posible TEA que muestra retraso en el lenguaje?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) Electroencefalograma</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) Análisis de sangre completo</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) Radiografía de tórax</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) Evaluación formal del lenguaje (PLS-5 o CELF-5)</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>d) Evaluación formal del lenguaje (PLS-5 o CELF-5)</strong>. Estas pruebas específicas ayudan a caracterizar el perfil lingüístico, clave para el diagnóstico diferencial.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <button class="btn btn-reset" onclick="resetQuiz('superior')">Reiniciar evaluación</button>
+            <div class="quiz-results"></div>
+        </div>
+    </div>
+
+    <div class="references">
+        <h2>Referencias</h2>
+        <p>American Psychiatric Association. (2022). <em>Diagnostic and statistical manual of mental disorders</em> (5th ed., text rev.).</p>
+        <p>Lord, C., Rutter, M., DiLavore, P. C., Risi, S., Gotham, K., & Bishop, S. L. (2012). <em>Autism Diagnostic Observation Schedule, Second Edition (ADOS-2)</em>. Western Psychological Services.</p>
+        <p>Robins, D. L., Fein, D., Barton, M. L., & Green, J. A. (2014). The Modified Checklist for Autism in Toddlers, Revised with Follow-Up (M-CHAT-R/F). <em>Pediatrics, 133</em>(1), 37–45.</p>
+        <p>Rutter, M., Le Couteur, A., & Lord, C. (2003). <em>Autism Diagnostic Interview-Revised (ADI-R)</em>. Western Psychological Services.</p>
+    </div>
+
+    <footer>
+        <p>© 2023 Material educativo sobre diagnóstico de TEA - DSM-5-TR</p>
+    </footer>
+
+    <script>
+        // Funciones para las pestañas
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].className = tabcontent[i].className.replace(" active", "");
+            }
+            
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            
+            document.getElementById(tabName).className += " active";
+            evt.currentTarget.className += " active";
+        }
+
+        // Funciones para el cuestionario
+        function selectQuizLevel(level) {
+            // Ocultar todos los cuestionarios
+            document.getElementById('quiz-inicial').classList.add('hidden');
+            document.getElementById('quiz-medio').classList.add('hidden');
+            document.getElementById('quiz-superior').classList.add('hidden');
+            
+            // Mostrar el seleccionado
+            document.getElementById('quiz-' + level).classList.remove('hidden');
+            
+            // Resaltar el nivel seleccionado
+            var levels = document.querySelectorAll('.quiz-level');
+            levels.forEach(function(el) {
+                el.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Reiniciar el cuestionario seleccionado
+            resetQuiz(level);
+        }
+
+        function selectOption(option) {
+            var options = option.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(function(el) {
+                el.classList.remove('selected');
+            });
+            option.classList.add('selected');
+        }
+
+        function checkAnswer(button) {
+            var question = button.parentElement;
+            var selectedOption = question.querySelector('.quiz-option.selected');
+            var correctAnswer = question.getAttribute('data-correct');
+            var options = question.querySelectorAll('.quiz-option');
+            var feedback = question.querySelector('.quiz-feedback');
+            
+            if (!selectedOption) {
+                alert('Por favor selecciona una respuesta');
+                return;
+            }
+            
+            // Mostrar qué opción era la correcta
+            options.forEach(function(option, index) {
+                option.classList.remove('correct', 'incorrect');
+                if (String.fromCharCode(97 + index) === correctAnswer) {
+                    option.classList.add('correct');
+                } else if (option === selectedOption) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            // Mostrar feedback
+            feedback.classList.add(selectedOption.textContent.trim().charAt(0) === correctAnswer ? 'correct' : 'incorrect');
+            
+            // Deshabilitar más selecciones
+            options.forEach(function(option) {
+                option.style.pointerEvents = 'none';
+            });
+            
+            button.disabled = true;
+            
+            // Actualizar resultados
+            updateQuizResults(question.closest('.quiz-container'));
+        }
+
+        function resetQuiz(level) {
+            var quiz = document.getElementById('quiz-' + level);
+            var questions = quiz.querySelectorAll('.quiz-question');
+            
+            questions.forEach(function(question) {
+                var options = question.querySelectorAll('.quiz-option');
+                var feedback = question.querySelector('.quiz-feedback');
+                var checkButton = question.querySelector('.btn-check');
+                
+                options.forEach(function(option) {
+                    option.classList.remove('selected', 'correct', 'incorrect');
+                    option.style.pointerEvents = 'auto';
+                });
+                
+                feedback.className = 'quiz-feedback';
+                checkButton.disabled = false;
+            });
+            
+            quiz.querySelector('.quiz-results').style.display = 'none';
+        }
+
+        function updateQuizResults(quizContainer) {
+            var questions = quizContainer.querySelectorAll('.quiz-question');
+            var totalQuestions = questions.length;
+            var answeredQuestions = 0;
+            var correctAnswers = 0;
+            
+            questions.forEach(function(question) {
+                var selectedOption = question.querySelector('.quiz-option.selected');
+                if (selectedOption) {
+                    answeredQuestions++;
+                    var correctAnswer = question.getAttribute('data-correct');
+                    if (selectedOption.textContent.trim().charAt(0) === correctAnswer) {
+                        correctAnswers++;
+                    }
+                }
+            });
+            
+            if (answeredQuestions === totalQuestions) {
+                var resultsDiv = quizContainer.querySelector('.quiz-results');
+                resultsDiv.style.display = 'block';
+                resultsDiv.innerHTML = 'Resultado: ' + correctAnswers + ' de ' + totalQuestions + ' correctas (' + 
+                                     Math.round((correctAnswers / totalQuestions) * 100) + '%)';
+            }
+        }
+    </script>
+</body>
+</html>
