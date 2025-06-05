@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psicología de la Motivación</title>
+    <style>
+        :root {
+            --primary: #3f51b5;
+            --secondary: #ff5722;
+            --light: #f5f5f5;
+            --dark: #212121;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        h1, h2, h3 {
+            color: var(--primary);
+        }
+        
+        .tab-container {
+            overflow-x: auto;
+            margin: 30px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        tr:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .comparison-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .comparison-card {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .comparison-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .theory-card {
+            border-left: 5px solid var(--secondary);
+        }
+        
+        .physiology-card {
+            border-left: 5px solid #4caf50;
+        }
+        
+        .cognitive-card {
+            border-left: 5px solid #2196f3;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #303f9f;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .references {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .references h3 {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+        
+        .references ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .references li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            text-indent: -20px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tab-button {
+            background-color: #e0e0e0;
+            color: var(--dark);
+        }
+        
+        .tab-button.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-section {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Psicología de la Motivación</h1>
+    <p>Material interactivo para clases de psicología</p>
+    
+    <div class="tab-buttons">
+        <button class="tab-button active" onclick="openTab('components')">Componentes</button>
+        <button class="tab-button" onclick="openTab('comparison')">Comparación</button>
+        <button class="tab-button" onclick="openTab('references')">Referencias</button>
+    </div>
+    
+    <div id="components" class="tab-content">
+        <h2>Componentes de la Motivación</h2>
+        <div class="tab-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Definición</th>
+                        <th>Ejemplo</th>
+                        <th>Teoría/Enfoque Principal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Fisiológico</strong></td>
+                        <td>Bases biológicas que impulsan la conducta (ej. hormonas, neurotransmisores).</td>
+                        <td>Hambre regulada por la ghrelina y leptina.</td>
+                        <td>Teoría de la homeostasis (Cannon, 1932).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cognitivo</strong></td>
+                        <td>Procesos mentales como expectativas, metas y autopercepción.</td>
+                        <td>Motivación intrínseca al aprender por interés.</td>
+                        <td>Teoría de la Autodeterminación (Deci & Ryan, 2000).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Conductual</strong></td>
+                        <td>Acciones observables reforzadas por estímulos externos.</td>
+                        <td>Estudio para obtener una recompensa.</td>
+                        <td>Conductismo (Skinner, 1953).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sociocultural</strong></td>
+                        <td>Influencias sociales y culturales en metas y valores.</td>
+                        <td>Presión social para lograr éxito académico.</td>
+                        <td>Teoría del Autoconcepto cultural (Markus & Kitayama, 1991).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <button onclick="toggleDetails('physio-details')">Mostrar más sobre bases fisiológicas</button>
+        <div id="physio-details" class="hidden">
+            <h3>Detalles sobre bases fisiológicas</h3>
+            <p>Las bases fisiológicas de la motivación incluyen:</p>
+            <ul>
+                <li>Sistema límbico (emociones)</li>
+                <li>Neurotransmisores como dopamina (recompensa)</li>
+                <li>Hormonas como cortisol (estrés) y oxitocina (apego)</li>
+                <li>Mecanismos homeostáticos (hambre, sed)</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div id="comparison" class="tab-content hidden">
+        <h2>Contraste: Bases Fisiológicas vs Cognitivas</h2>
+        
+        <div class="comparison-section">
+            <div class="comparison-card theory-card">
+                <h3>Teoría de James-Lange</h3>
+                <p><em>"El cuerpo reacciona primero"</em></p>
+                <p><strong>Base fisiológica</strong></p>
+                <p>Ejemplo: Corres porque sientes taquicardia (reacción física precede a la emoción).</p>
+            </div>
+            
+            <div class="comparison-card theory-card">
+                <h3>Teoría de Lazarus</h3>
+                <p><em>"La mente interpreta primero"</em></p>
+                <p><strong>Base cognitiva</strong></p>
+                <p>Ejemplo: Corres porque piensas "es peligroso" (interpretación precede a la reacción).</p>
+            </div>
+        </div>
+        
+        <div class="comparison-section">
+            <div class="comparison-card physiology-card">
+                <h3>Características de la Base Fisiológica</h3>
+                <ul>
+                    <li>Innata y automática</li>
+                    <li>Universal en la especie</li>
+                    <li>Rápida respuesta</li>
+                    <li>Mecanismos biológicos identificables</li>
+                </ul>
+            </div>
+            
+            <div class="comparison-card cognitive-card">
+                <h3>Características de la Base Cognitiva</h3>
+                <ul>
+                    <li>Adquirida y flexible</li>
+                    <li>Varía según experiencias</li>
+                    <li>Procesamiento más lento</li>
+                    <li>Influenciada por creencias y expectativas</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="interactive-example">
+            <h3>Ejemplo Interactivo</h3>
+            <p>Selecciona una situación para ver cómo la explicarían ambas teorías:</p>
+            
+            <select id="scenario-select" onchange="updateScenario()">
+                <option value="0">Selecciona una situación...</option>
+                <option value="1">Ver un perro grande que ladra</option>
+                <option value="2">Recibir una mala nota</option>
+                <option value="3">Ver a alguien llorando</option>
+            </select>
+            
+            <div id="scenario-result" class="hidden" style="margin-top: 20px; padding: 15px; background-color: #e8f5e9; border-radius: 5px;">
+                <h4>Análisis:</h4>
+                <p><strong>James-Lange (Fisiológico):</strong> <span id="jl-response"></span></p>
+                <p><strong>Lazarus (Cognitivo):</strong> <span id="lz-response"></span></p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="references" class="tab-content hidden references">
+        <h3>Referencias Bibliográficas (APA)</h3>
+        <ul>
+            <li>Bandura, A. (1997). <em>Self-efficacy: The exercise of control</em>. W.H. Freeman.</li>
+            <li>Cannon, W. B. (1932). <em>The wisdom of the body</em>. W.W. Norton & Company.</li>
+            <li>Deci, E. L., & Ryan, R. M. (2000). The "what" and "why" of goal pursuits: Human needs and the self-determination of behavior. <em>Psychological Inquiry, 11</em>(4), 227–268.</li>
+            <li>Markus, H. R., & Kitayama, S. (1991). Culture and the self: Implications for cognition, emotion, and motivation. <em>Psychological Review, 98</em>(2), 224–253.</li>
+            <li>Ryan, R. M., & Deci, E. L. (2017). <em>Self-determination theory: Basic psychological needs in motivation, development, and wellness</em>. Guilford Press.</li>
+            <li>Skinner, B. F. (1953). <em>Science and human behavior</em>. Simon and Schuster.</li>
+        </ul>
+    </div>
+    
+    <script>
+        function openTab(tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.add("hidden");
+            }
+            
+            const tabButtons = document.getElementsByClassName("tab-button");
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.remove("hidden");
+            event.currentTarget.classList.add("active");
+        }
+        
+        function toggleDetails(id) {
+            const element = document.getElementById(id);
+            element.classList.toggle("hidden");
+            
+            const button = event.currentTarget;
+            if (element.classList.contains("hidden")) {
+                button.textContent = "Mostrar más sobre bases fisiológicas";
+            } else {
+                button.textContent = "Ocultar detalles";
+            }
+        }
+        
+        function updateScenario() {
+            const select = document.getElementById("scenario-select");
+            const resultDiv = document.getElementById("scenario-result");
+            const jlResponse = document.getElementById("jl-response");
+            const lzResponse = document.getElementById("lz-response");
+            
+            if (select.value === "0") {
+                resultDiv.classList.add("hidden");
+                return;
+            }
+            
+            resultDiv.classList.remove("hidden");
+            
+            const scenarios = [
+                {
+                    jl: "Primero sientes taquicardia y tensión muscular, luego interpretas esto como miedo.",
+                    lz: "Primero piensas 'este perro podría morderme', lo que desencadena la respuesta fisiológica de miedo."
+                },
+                {
+                    jl: "Experimentas opresión en el pecho y malestar estomacal, luego interpretas estas sensaciones como decepción.",
+                    lz: "Primero evalúas que la nota afectará tu promedio y futuro, lo que genera la respuesta emocional."
+                },
+                {
+                    jl: "Sientes una opresión en la garganta y humedad en los ojos antes de reconocer que estás sintiendo empatía.",
+                    lz: "Primero interpretas que la persona está sufriendo, lo que desencadena tu respuesta empática fisiológica."
+                }
+            ];
+            
+            const selectedScenario = scenarios[parseInt(select.value) - 1];
+            jlResponse.textContent = selectedScenario.jl;
+            lzResponse.textContent = selectedScenario.lz;
+        }
+    </script>
+</body>
+</html>
