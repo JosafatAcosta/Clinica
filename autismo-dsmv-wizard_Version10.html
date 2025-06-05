@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagnóstico de Autismo</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f7f7fa;
+      min-height: 100vh;
+    }
+    header {
+      background: #2d72d9;
+      color: #fff;
+      text-align: center;
+      padding: 2rem 1rem 1.2rem 1rem;
+      font-size: 2rem;
+      letter-spacing: 1px;
+    }
+    .wizard-container {
+      max-width: 750px;
+      margin: 2rem auto 2rem auto;
+      background: #fff;
+      border-radius: 1.5rem;
+      box-shadow: 0 6px 24px rgba(44,62,80,0.14);
+      padding: 2rem 1.5rem 2rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .wizard-step {
+      display: none;
+      animation: fadeIn 0.3s;
+      min-height: 350px;
+    }
+    .wizard-step.active {
+      display: block;
+    }
+    .wizard-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+    .wizard-buttons button {
+      background: #2d72d9;
+      color: #fff;
+      border: none;
+      border-radius: 0.7rem;
+      padding: 0.8rem 2.1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+    }
+    .wizard-buttons button:disabled {
+      background: #b6cffb;
+      cursor: not-allowed;
+    }
+    .wizard-buttons .back-btn {
+      background: #e0e7ff;
+      color: #2d72d9;
+      border: 1px solid #b6cffb;
+    }
+    .wizard-buttons .back-btn:hover {
+      background: #b6cffb;
+    }
+    .wizard-buttons button:not(:disabled):hover {
+      background: #2056b3;
+      color: #fff;
+    }
+    .progress-bar-bg {
+      width: 100%;
+      background: #e0e7ff;
+      border-radius: 1rem;
+      height: 14px;
+      margin-bottom: 2.5rem;
+      overflow: hidden;
+    }
+    .progress-bar-fg {
+      background: #2d72d9;
+      height: 100%;
+      border-radius: 1rem;
+      width: 0%;
+      transition: width 0.3s;
+    }
+    h2 {
+      color: #2056b3;
+      margin-bottom: 1.1rem;
+      font-size: 1.25rem;
+      letter-spacing: 0.5px;
+      margin-top: 1rem;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+    }
+    .sub-label {
+      font-weight: normal;
+      font-size: 0.98em;
+      color: #444;
+      margin-left: 0.3rem;
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+    .input-group {
+      margin-bottom: 1.2rem;
+    }
+    select, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 0.4rem;
+      border: 1px solid #b6cffb;
+      margin-top: 0.3rem;
+      font-size: 1em;
+      box-sizing: border-box;
+    }
+    textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+    .checkbox-group {
+      margin-left: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .checkbox-group label {
+      font-weight: normal;
+      margin-right: 1.5rem;
+      display: inline-block;
+    }
+    .result-section {
+      background: #e0e7ff;
+      border-radius: 1rem;
+      padding: 1.2rem;
+      margin-top: 2rem;
+      text-align: left;
+      color: #202040;
+    }
+    .final-credit {
+      text-align: center;
+      color: #2056b3;
+      font-size: 1.07rem;
+      margin-top: 2.5rem;
+      margin-bottom: 0.8rem;
+      font-style: italic;
+      line-height: 1.35;
+    }
+    .presentacion-instrumento {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+      padding: 2rem 1rem 1rem 1rem;
+      text-align: center;
+      color: #2056b3;
+      animation: fadeIn 0.5s;
+    }
+    .presentacion-instrumento .titulo-instrumento {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1.2rem;
+      color: #2d72d9;
+    }
+    .presentacion-instrumento .descripcion-instrumento {
+      font-size: 1.07rem;
+      margin-bottom: 1.5rem;
+      color: #234;
+      line-height: 1.5;
+    }
+    .presentacion-instrumento .autor-instrumento {
+      margin-top: 2.2rem;
+      font-size: 1.07rem;
+      font-style: italic;
+      color: #2056b3;
+      opacity: 0.92;
+    }
+    .presentacion-instrumento .start-btn {
+      margin-top: 2.5rem;
+      background: #2d72d9;
+      color: #fff;
+      border: none;
+      border-radius: 0.7rem;
+      padding: 0.8rem 2.1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+    }
+    .presentacion-instrumento .start-btn:hover {
+      background: #2056b3;
+    }
+    .nota-especificador {
+      display: block;
+      margin-top: 0.6rem;
+      margin-bottom: 0.6rem;
+      font-style: italic;
+      color: #234;
+      background: #f0f4fa;
+      border-left: 4px solid #8bbbf7;
+      padding: 0.7rem 1.2rem;
+      font-size: 1.03rem;
+    }
+    .criterio-requisito {
+      background: #f8f6e6;
+      color: #a8921f;
+      padding: 0.33rem 1rem;
+      border-radius: 0.8rem;
+      display: block;
+      margin-bottom: 1rem;
+      font-weight: bold;
+      font-size: 1.08rem;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    @media (max-width: 600px) {
+      header {
+        font-size: 1.1rem;
+        padding: 1.2rem 0.5rem;
+      }
+      .wizard-container {
+        padding: 0.7rem 0.2rem;
+      }
+      .presentacion-instrumento {
+        padding: 1rem 0.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Diagnóstico de Autismo
+  </header>
+  <div class="wizard-container">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fg" id="progressBar"></div>
+    </div>
+    <!-- Pantalla de presentación independiente -->
+    <div id="introScreen" class="presentacion-instrumento">
+      <div class="titulo-instrumento">
+        Herramienta de apoyo para entrevista clínica DSM-5-TR<br>Trastorno del Espectro Autista (TEA)
+      </div>
+      <div class="descripcion-instrumento">
+        Esta herramienta sirve de soporte para llevar a cabo una recolección clínica lo más objetiva posible.<br>
+        Puede ser utilizada como soporte de una entrevista estructurada o como una herramienta de investigación-acción en intervenciones clínico-comunitarias.
+      </div>
+      <div class="autor-instrumento">
+        Instrumento desarrollado por Psic. R. Josafat Acosta García | Tramas Escucha a Víctimas de Violencia, A.C.
+      </div>
+      <button type="button" class="start-btn" onclick="showWizard()">Iniciar evaluación</button>
+    </div>
+    <form id="wizardForm" autocomplete="off" style="display:none;">
+      <!-- PASO 1: Criterio A -->
+      <div class="wizard-step active">
+        <span class="criterio-requisito">Deben cumplirse 3 de 3 características</span>
+        <h2>Criterio A: Comunicación e interacción social</h2>
+        <div class="input-group">
+          <label>1. Deficiencias en la reciprocidad socioemocional</label>
+          <span class="sub-label">
+            Bajo: Responde a saludos con poca emoción | Medio: Poco interés en compartir emociones | Alto: No responde a la interacción social<br>
+            <b>NO:</b> No aplica o no se observa esta característica.
+          </span>
+          <select name="criterioA1" required>
+            <option value="">Selecciona gravedad</option>
+            <option value="bajo">Bajo</option>
+            <option value="medio">Medio</option>
+            <option value="alto">Alto</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>2. Deficiencias en conductas comunicativas no verbales</label>
+          <span class="sub-label">
+            Bajo: Contacto visual breve | Medio: Rara vez usa gestos apropiados | Alto: No usa expresión gestual ni facial<br>
+            <b>NO:</b> No aplica o no se observa esta característica.
+          </span>
+          <select name="criterioA2" required>
+            <option value="">Selecciona gravedad</option>
+            <option value="bajo">Bajo</option>
+            <option value="medio">Medio</option>
+            <option value="alto">Alto</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>3. Deficiencias en desarrollo, mantenimiento y comprensión de relaciones</label>
+          <span class="sub-label">
+            Bajo: Tiene amigos, pero dificultad con normas sociales | Medio: Problemas para compartir juegos | Alto: No busca relaciones<br>
+            <b>NO:</b> No aplica o no se observa esta característica.
+          </span>
+          <select name="criterioA3" required>
+            <option value="">Selecciona gravedad</option>
+            <option value="bajo">Bajo</option>
+            <option value="medio">Medio</option>
+            <option value="alto">Alto</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Especificar la gravedad global:</label>
+          <span class="sub-label">
+            Bajo: Requiere apoyo | Medio: Requiere apoyo sustancial | Alto: Requiere apoyo muy sustancial | NO: No requiere apoyo<br>
+            <b>Ejemplo:</b> "Nivel 1 es cuando la persona necesita ayuda para relacionarse, pero puede lograrlo en ocasiones."
+          </span>
+          <select name="criterioAGlobal" required>
+            <option value="">Selecciona gravedad global</option>
+            <option value="bajo">Bajo</option>
+            <option value="medio">Medio</option>
+            <option value="alto">Alto</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <!-- PASO 2: Criterio B -->
+      <div class="wizard-step">
+        <span class="criterio-requisito">Deben cumplirse al menos 2 de 4 características</span>
+        <h2>Criterio B: Patrones restrictivos y repetitivos</h2>
+        <div class="input-group">
+          <label>1. Movimientos motores, uso de objetos o habla estereotipada o repetitiva</label>
+          <span class="sub-label">
+            Bajo: Aleteo ocasional | Medio: Movimientos repetitivos que interfieren | Alto: Conductas estereotipadas constantes<br>
+            <b>NO:</b> No aplica o no se observa.
+          </span>
+          <select name="criterioB1" required>
+            <option value="">Selecciona gravedad</option>
+            <option value="bajo">Bajo</option>
+            <option value="medio">Medio</option>
+            <option value="alto">Alto</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>2. Insistencia en igualdad, adherencia inflexible a rutinas</label>
+          <span class="sub-label">
+            Bajo: Prefiere rutinas | Medio: Angustia ante cambios menores | Alto: Crisis ante cualquier alteración de rutina<br>
+            <b>NO:</b> No aplica o no se observa.
+          </span>
+          <select name="criterioB2" required>
+            <option value="">Selecciona gravedad</option>
+            <option value="bajo">Bajo</option>
+            <option value="medio">Medio</option>
+            <option value="alto">Alto</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>3. Intereses muy restringidos y fijos</label>
+          <span class="sub-label">
+            Bajo: Interés especial pero flexible | Medio: Solo habla de un tema | Alto: Solo ese tema<br>
+            <b>NO:</b> No aplica o no se observa.
+          </span>
+          <select name="criterioB3" required>
+            <option value="">Selecciona gravedad</option>
+            <option value="bajo">Bajo</option>
+            <option value="medio">Medio</option>
+            <option value="alto">Alto</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>4. Hiper- o hiporreactividad a estímulos sensoriales</label>
+          <span class="sub-label">
+            Bajo: Molestia a ciertos ruidos/texturas | Medio: Evita lugares con luces o sonidos fuertes | Alto: Crisis ante estímulos comunes<br>
+            <b>NO:</b> No aplica o no se observa.
+          </span>
+          <select name="criterioB4" required>
+            <option value="">Selecciona gravedad</option>
+            <option value="bajo">Bajo</option>
+            <option value="medio">Medio</option>
+            <option value="alto">Alto</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <!-- PASO 3: Criterio C -->
+      <div class="wizard-step">
+        <h2>Criterio C: Inicio en periodo temprano</h2>
+        <div class="input-group">
+          <label>¿Los síntomas están presentes desde el periodo temprano del desarrollo?</label>
+          <span class="sub-label">Ejemplo: Síntomas en la infancia, aunque puedan manifestarse plenamente más tarde.<br><b>NO:</b> No hay evidencia de síntomas en el periodo temprano.</span>
+          <select name="criterioC" required>
+            <option value="">Selecciona opción</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <!-- PASO 4: Criterio D -->
+      <div class="wizard-step">
+        <h2>Criterio D: Deterioro clínicamente significativo</h2>
+        <div class="input-group">
+          <label>¿Los síntomas causan deterioro clínicamente significativo en lo social, laboral u otras áreas importantes?</label>
+          <span class="sub-label">Ejemplo: Afecta funcionamiento diario en escuela, trabajo o vida social.<br><b>NO:</b> No hay impacto clínicamente significativo.</span>
+          <select name="criterioD" required>
+            <option value="">Selecciona opción</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <!-- PASO 5: Criterio E -->
+      <div class="wizard-step">
+        <h2>Criterio E: No explicado mejor por discapacidad intelectual</h2>
+        <div class="input-group">
+          <label>¿Las alteraciones no se explican mejor por discapacidad intelectual o retraso global del desarrollo?</label>
+          <span class="sub-label">Ejemplo: Los síntomas de autismo exceden lo esperado por discapacidad intelectual.<br><b>NO:</b> Sí se explican mejor por discapacidad intelectual o retraso global.</span>
+          <select name="criterioE" required>
+            <option value="">Selecciona opción</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <!-- PASO 6: Especificadores de gravedad -->
+      <div class="wizard-step">
+        <h2>Especificadores de gravedad (DSM-5-TR)</h2>
+        <span class="nota-especificador">La gravedad se registrará de acuerdo con el grado de ayuda necesaria para cada uno de los dominios psicopatológicos.</span>
+        <div class="input-group">
+          <label>Nivel de gravedad en Comunicación social</label>
+          <span class="sub-label">
+            Nivel 1: Dificultad notable para iniciar interacciones sociales.<br>
+            Nivel 2: Dificultades marcadas, respuestas limitadas.<br>
+            Nivel 3: Severos deterioros, mínima respuesta.<br>
+            No requiere apoyo: No aplica.<br>
+            <b>Ejemplo para explicar:</b> "Nivel 1: necesita ayuda ocasional; Nivel 3: respuesta mínima incluso con apoyo."
+          </span>
+          <select name="gravCS" required>
+            <option value="">Selecciona nivel</option>
+            <option value="1">Nivel 1</option>
+            <option value="2">Nivel 2</option>
+            <option value="3">Nivel 3</option>
+            <option value="no">No requiere apoyo</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Nivel de gravedad en Comportamientos repetitivos/restringidos</label>
+          <span class="sub-label">
+            Nivel 1: Conductas repetitivas afectan la vida diaria.<br>
+            Nivel 2: Conductas interfieren frecuentemente.<br>
+            Nivel 3: Conductas dominan el día a día.<br>
+            No requiere apoyo: No aplica.<br>
+            <b>Ejemplo para explicar:</b> "Nivel 1: pueden manejarse con ayuda; Nivel 3: muy difíciles de cambiar."
+          </span>
+          <select name="gravCRR" required>
+            <option value="">Selecciona nivel</option>
+            <option value="1">Nivel 1</option>
+            <option value="2">Nivel 2</option>
+            <option value="3">Nivel 3</option>
+            <option value="no">No requiere apoyo</option>
+          </select>
+        </div>
+      </div>
+      <!-- PASO 7: Especificadores y Registro -->
+      <div class="wizard-step">
+        <h2>Especificadores y Registro</h2>
+        <div class="input-group">
+          <label>Discapacidad intelectual asociada</label>
+          <select name="discapacidadIntelectual" required>
+            <option value="">Selecciona</option>
+            <option value="Sí">Sí</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Alteración del lenguaje asociada</label>
+          <select name="alteracionLenguaje" required>
+            <option value="">Selecciona</option>
+            <option value="Sí">Sí</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Condición médica/genética o ambiental conocida</label>
+          <input type="text" name="condicionMedica" placeholder="(Ejemplo: epilepsia, síndrome X frágil, etc.)">
+        </div>
+        <div class="input-group">
+          <label>Otros trastornos asociados</label>
+          <input type="text" name="otrosTrastornos" placeholder="(Ejemplo: TDAH, ansiedad, etc.)">
+        </div>
+      </div>
+      <!-- PASO 8: Características diagnósticas -->
+      <div class="wizard-step">
+        <h2>Características diagnósticas</h2>
+        <div class="input-group">
+          <label>Describe ejemplos de dificultades sociales y patrones repetitivos observados:</label>
+          <textarea name="caracteristicasDiagnosticas"></textarea>
+        </div>
+      </div>
+      <!-- PASO 9: Características asociadas -->
+      <div class="wizard-step">
+        <h2>Características asociadas</h2>
+        <div class="input-group">
+          <label>¿Hay características asociadas? (Problemas motores, sensoriales, sueño, etc.)</label>
+          <textarea name="caracteristicasAsociadas"></textarea>
+        </div>
+      </div>
+      <!-- PASO 10: Desarrollo y curso -->
+      <div class="wizard-step">
+        <h2>Desarrollo y curso</h2>
+        <div class="input-group">
+          <label>¿A qué edad se detectaron los primeros síntomas? Describe el curso:</label>
+          <textarea name="desarrolloCurso"></textarea>
+        </div>
+      </div>
+      <!-- PASO 11: Factores de riesgo y pronóstico -->
+      <div class="wizard-step">
+        <h2>Factores de riesgo y pronóstico</h2>
+        <div class="input-group">
+          <label>Factores de riesgo identificados (selecciona los relevantes):</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="factoresRiesgo" value="Antecedentes familiares de TEA"> Antecedentes familiares de TEA</label>
+            <label><input type="checkbox" name="factoresRiesgo" value="Edad parental avanzada"> Edad parental avanzada</label>
+            <label><input type="checkbox" name="factoresRiesgo" value="Bajo peso al nacer"> Bajo peso al nacer</label>
+            <label><input type="checkbox" name="factoresRiesgo" value="Exposición prenatal a tóxicos"> Exposición prenatal a tóxicos</label>
+            <label><input type="checkbox" name="factoresRiesgo" value="Complicaciones perinatales"> Complicaciones perinatales</label>
+            <label><input type="checkbox" name="factoresRiesgo" value="Condición genética (ej. Síndrome X Frágil, Rett, etc.)"> Condición genética (ej. Síndrome X Frágil, Rett, etc.)</label>
+          </div>
+          <input type="text" name="factoresRiesgoOtros" placeholder="Otros factores de riesgo (opcional)">
+        </div>
+        <div class="input-group">
+          <label>Pronóstico esperado</label>
+          <textarea name="pronostico"></textarea>
+        </div>
+      </div>
+      <!-- PASO 12: Diagnóstico diferencial -->
+      <div class="wizard-step">
+        <h2>Diagnóstico diferencial</h2>
+        <div class="input-group">
+          <label>¿Se consideraron otros diagnósticos? (marca los que aplican)</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="Discapacidad intelectual sin TEA"> Discapacidad intelectual sin TEA</label>
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="Trastorno de la comunicación social (pragmático)"> Trastorno comunicación social (pragmático)</label>
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="Trastorno obsesivo-compulsivo (TOC)"> TOC</label>
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="Esquizofrenia"> Esquizofrenia</label>
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="TDAH"> TDAH</label>
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="Trastornos de ansiedad"> Trastornos de ansiedad</label>
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="Trastornos del desarrollo del lenguaje"> Trastornos del desarrollo del lenguaje</label>
+          </div>
+          <input type="text" name="diagnosticoDiferencialOtros" placeholder="Otros diagnósticos diferenciales (opcional)">
+        </div>
+        <div class="input-group">
+          <label>¿Por qué se descartaron los diagnósticos diferenciales seleccionados?</label>
+          <textarea name="descartarDiferencial"></textarea>
+        </div>
+      </div>
+      <!-- PASO 13: Comorbilidad -->
+      <div class="wizard-step">
+        <h2>Comorbilidad</h2>
+        <div class="input-group">
+          <label>Comorbilidades presentes (marca las que aplican):</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="comorbilidad" value="TDAH"> TDAH</label>
+            <label><input type="checkbox" name="comorbilidad" value="Ansiedad"> Ansiedad</label>
+            <label><input type="checkbox" name="comorbilidad" value="Depresión"> Depresión</label>
+            <label><input type="checkbox" name="comorbilidad" value="Epilepsia"> Epilepsia</label>
+            <label><input type="checkbox" name="comorbilidad" value="Trastornos del sueño"> Trastornos del sueño</label>
+            <label><input type="checkbox" name="comorbilidad" value="Problemas gastrointestinales"> Problemas gastrointestinales</label>
+            <label><input type="checkbox" name="comorbilidad" value="Discapacidad intelectual"> Discapacidad intelectual</label>
+          </div>
+          <input type="text" name="comorbilidadOtros" placeholder="Otras comorbilidades (opcional)">
+        </div>
+      </div>
+      <!-- PASO FINAL: Resumen -->
+      <div class="wizard-step">
+        <h2>Resumen</h2>
+        <div id="resultado" class="result-section"></div>
+        <div class="final-credit">
+          Instrumento desarrollado por Psic. R. Josafat Acosta García | Tramas Escucha a Víctimas de Violencia, A.C.
+        </div>
+      </div>
+      <div class="wizard-buttons">
+        <button type="button" class="back-btn" onclick="prevStep()">Anterior</button>
+        <button type="button" onclick="nextStep()" id="nextBtn">Siguiente</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    let steps = [];
+    let currentStep = 0;
+    const progressBar = document.getElementById('progressBar');
+    const nextBtn = document.getElementById('nextBtn');
+    const backBtn = document.querySelector('.back-btn');
+    const wizardForm = document.getElementById('wizardForm');
+    const introScreen = document.getElementById('introScreen');
+
+    function showWizard() {
+      introScreen.style.display = "none";
+      wizardForm.style.display = "block";
+      // Inicializamos pasos SOLO después de mostrar el wizard
+      if (steps.length === 0) {
+        document.querySelectorAll('.wizard-step').forEach((step, i) => {
+          if (!step.classList.contains('presentacion-instrumento')) steps.push(step);
+        });
+      }
+      currentStep = 0;
+      showStep(currentStep);
+    }
+
+    function showStep(idx) {
+      steps.forEach((step, i) => step.classList.toggle('active', i === idx));
+      backBtn.style.display = idx === 0 ? "none" : "inline-block";
+      nextBtn.style.display = "inline-block";
+      nextBtn.textContent = (idx === steps.length - 2) ? 'Finalizar' : (idx === steps.length - 1 ? 'Reiniciar' : 'Siguiente');
+      progressBar.style.width = (idx/(steps.length-1)*100) + "%";
+    }
+
+    function nextStep() {
+      if (currentStep < steps.length - 2) {
+        // Validar campos requeridos del paso actual
+        const fields = steps[currentStep].querySelectorAll('select[required], textarea[required], input[required]');
+        for (let field of fields) {
+          if (!field.value) {
+            field.focus();
+            field.style.borderColor = "#e74c3c";
+            setTimeout(()=>{field.style.borderColor="#b6cffb"}, 1200);
+            return;
+          }
+        }
+        currentStep++;
+        showStep(currentStep);
+      } else if (currentStep === steps.length - 2) {
+        // Generar resumen
+        generarResumen();
+        currentStep++;
+        showStep(currentStep);
+        nextBtn.textContent = "Reiniciar";
+      } else {
+        // Reiniciar: volver a la pantalla de presentación
+        wizardForm.reset();
+        wizardForm.style.display = "none";
+        introScreen.style.display = "flex";
+        document.getElementById('resultado').innerHTML = "";
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 0) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    }
+
+    function generarResumen() {
+      const f = document.getElementById('wizardForm');
+      let resumen = "<b>Criterio A:</b><ul>";
+      resumen += "<li>Reciprocidad socioemocional: <b>" + f.criterioA1.value + "</b></li>";
+      resumen += "<li>Comunicativas no verbales: <b>" + f.criterioA2.value + "</b></li>";
+      resumen += "<li>Relaciones: <b>" + f.criterioA3.value + "</b></li>";
+      resumen += "<li>Gravedad global: <b>" + f.criterioAGlobal.value + "</b></li></ul>";
+      resumen += "<b>Criterio B:</b><ul>";
+      resumen += "<li>Movimientos motores/estereotipias: <b>" + f.criterioB1.value + "</b></li>";
+      resumen += "<li>Adherencia a rutinas: <b>" + f.criterioB2.value + "</b></li>";
+      resumen += "<li>Intereses restringidos: <b>" + f.criterioB3.value + "</b></li>";
+      resumen += "<li>Sensibilidad sensorial: <b>" + f.criterioB4.value + "</b></li></ul>";
+      resumen += "<b>Criterio C:</b> " + (f.criterioC.value || "No especificado") + "<br>";
+      resumen += "<b>Criterio D:</b> " + (f.criterioD.value || "No especificado") + "<br>";
+      resumen += "<b>Criterio E:</b> " + (f.criterioE.value || "No especificado") + "<br>";
+      resumen += "<b>Especificadores DSM-5-TR:</b> Comunicación social: <b>" + f.gravCS.value + "</b>, Comportamientos repetitivos: <b>" + f.gravCRR.value + "</b><br>";
+      resumen += "<b>Discapacidad intelectual:</b> " + f.discapacidadIntelectual.value + "<br>";
+      resumen += "<b>Alteración del lenguaje:</b> " + f.alteracionLenguaje.value + "<br>";
+      if (f.condicionMedica.value) resumen += "<b>Condición médica/genética:</b> " + f.condicionMedica.value + "<br>";
+      if (f.otrosTrastornos.value) resumen += "<b>Otros trastornos asociados:</b> " + f.otrosTrastornos.value + "<br>";
+      resumen += "<b>Características diagnósticas:</b><br>" + (f.caracteristicasDiagnosticas.value||"") + "<br>";
+      resumen += "<b>Características asociadas:</b><br>" + (f.caracteristicasAsociadas.value||"") + "<br>";
+      resumen += "<b>Desarrollo y curso:</b><br>" + (f.desarrolloCurso.value||"") + "<br>";
+
+      // Factores de riesgo
+      let factoresRiesgoSel = [];
+      document.querySelectorAll('input[name="factoresRiesgo"]:checked').forEach(el => { factoresRiesgoSel.push(el.value); });
+      if (f.factoresRiesgoOtros.value) factoresRiesgoSel.push(f.factoresRiesgoOtros.value);
+      resumen += "<b>Factores de riesgo:</b><br>" + (factoresRiesgoSel.length ? factoresRiesgoSel.join(', ') : "No especificado") + "<br>";
+      resumen += "<b>Pronóstico:</b><br>" + (f.pronostico.value||"") + "<br>";
+
+      // Diagnóstico diferencial
+      let diagDiffSel = [];
+      document.querySelectorAll('input[name="diagnosticoDiferencial"]:checked').forEach(el => { diagDiffSel.push(el.value); });
+      if (f.diagnosticoDiferencialOtros.value) diagDiffSel.push(f.diagnosticoDiferencialOtros.value);
+      resumen += "<b>Diagnóstico diferencial:</b><br>" + (diagDiffSel.length ? diagDiffSel.join(', ') : "No especificado") + "<br>";
+      resumen += "<b>Motivo de descarte:</b><br>" + (f.descartarDiferencial.value||"") + "<br>";
+
+      // Comorbilidad
+      let comorbilidadSel = [];
+      document.querySelectorAll('input[name="comorbilidad"]:checked').forEach(el => { comorbilidadSel.push(el.value); });
+      if (f.comorbilidadOtros.value) comorbilidadSel.push(f.comorbilidadOtros.value);
+      resumen += "<b>Comorbilidades:</b><br>" + (comorbilidadSel.length ? comorbilidadSel.join(', ') : "No especificado") + "<br>";
+
+      document.getElementById('resultado').innerHTML = resumen;
+    }
+  </script>
+</body>
+</html>
