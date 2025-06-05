@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagnóstico de TDAH (DSM-5-TR)</title>
+  <style>
+    /* ... (mismos estilos que la versión anterior para coherencia visual) ... */
+    body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background: #f7f7fa; min-height: 100vh;}
+    header { background: #2d72d9; color: #fff; text-align: center; padding: 2rem 1rem 1.2rem 1rem; font-size: 2rem; letter-spacing: 1px;}
+    .wizard-container { max-width: 750px; margin: 2rem auto 2rem auto; background: #fff; border-radius: 1.5rem; box-shadow: 0 6px 24px rgba(44,62,80,0.14); padding: 2rem 1.5rem 2rem 1.5rem; position: relative; overflow: hidden;}
+    .wizard-step { display: none; animation: fadeIn 0.3s; min-height: 350px;}
+    .wizard-step.active { display: block;}
+    .wizard-buttons { display: flex; justify-content: space-between; margin-top: 2rem;}
+    .wizard-buttons button { background: #2d72d9; color: #fff; border: none; border-radius: 0.7rem; padding: 0.8rem 2.1rem; font-size: 1rem; cursor: pointer; transition: background 0.2s, box-shadow 0.2s; font-weight: bold; box-shadow: 0 2px 8px rgba(44,62,80,0.07);}
+    .wizard-buttons button:disabled { background: #b6cffb; cursor: not-allowed;}
+    .wizard-buttons .back-btn { background: #e0e7ff; color: #2d72d9; border: 1px solid #b6cffb;}
+    .wizard-buttons .back-btn:hover { background: #b6cffb;}
+    .wizard-buttons button:not(:disabled):hover { background: #2056b3; color: #fff;}
+    .progress-bar-bg { width: 100%; background: #e0e7ff; border-radius: 1rem; height: 14px; margin-bottom: 2.5rem; overflow: hidden;}
+    .progress-bar-fg { background: #2d72d9; height: 100%; border-radius: 1rem; width: 0%; transition: width 0.3s;}
+    h2 { color: #2056b3; margin-bottom: 1.1rem; font-size: 1.25rem; letter-spacing: 0.5px; margin-top: 1rem;}
+    label { font-weight: bold; display: block;}
+    .sub-label { font-weight: normal; font-size: 0.98em; color: #444; margin-left: 0.3rem; margin-bottom: 0.3rem; display: block;}
+    .input-group { margin-bottom: 1.2rem;}
+    select, textarea { width: 100%; padding: 0.5rem; border-radius: 0.4rem; border: 1px solid #b6cffb; margin-top: 0.3rem; font-size: 1em; box-sizing: border-box;}
+    textarea { min-height: 60px; resize: vertical;}
+    .checkbox-group { margin-left: 1.2rem; margin-bottom: 0.5rem;}
+    .checkbox-group label { font-weight: normal; margin-right: 1.5rem; display: inline-block;}
+    .result-section { background: #e0e7ff; border-radius: 1rem; padding: 1.2rem; margin-top: 2rem; text-align: left; color: #202040;}
+    .final-credit { text-align: center; color: #2056b3; font-size: 1.07rem; margin-top: 2.5rem; margin-bottom: 0.8rem; font-style: italic; line-height: 1.35;}
+    .presentacion-instrumento { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; padding: 2rem 1rem 1rem 1rem; text-align: center; color: #2056b3; animation: fadeIn 0.5s;}
+    .presentacion-instrumento .titulo-instrumento { font-size: 1.5rem; font-weight: bold; margin-bottom: 1.2rem; color: #2d72d9;}
+    .presentacion-instrumento .descripcion-instrumento { font-size: 1.07rem; margin-bottom: 1.5rem; color: #234; line-height: 1.5;}
+    .presentacion-instrumento .autor-instrumento { margin-top: 2.2rem; font-size: 1.07rem; font-style: italic; color: #2056b3; opacity: 0.92;}
+    .presentacion-instrumento .start-btn { margin-top: 2.5rem; background: #2d72d9; color: #fff; border: none; border-radius: 0.7rem; padding: 0.8rem 2.1rem; font-size: 1rem; cursor: pointer; transition: background 0.2s, box-shadow 0.2s; font-weight: bold; box-shadow: 0 2px 8px rgba(44,62,80,0.07);}
+    .presentacion-instrumento .start-btn:hover { background: #2056b3;}
+    .criterio-requisito { background: #f8f6e6; color: #a8921f; padding: 0.33rem 1rem; border-radius: 0.8rem; display: block; margin-bottom: 1rem; font-weight: bold; font-size: 1.08rem;}
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;}}
+    @media (max-width: 600px) { header { font-size: 1.1rem; padding: 1.2rem 0.5rem;} .wizard-container { padding: 0.7rem 0.2rem;} .presentacion-instrumento { padding: 1rem 0.2rem;}}
+  </style>
+</head>
+<body>
+  <header>
+    Diagnóstico de TDAH (DSM-5-TR)
+  </header>
+  <div class="wizard-container">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fg" id="progressBar"></div>
+    </div>
+    <!-- Intro -->
+    <div id="introScreen" class="presentacion-instrumento">
+      <div class="titulo-instrumento">
+        Herramienta de apoyo para entrevista clínica DSM-5-TR<br>TDAH (Trastorno por Déficit de Atención e Hiperactividad)
+      </div>
+      <div class="descripcion-instrumento">
+        Esta herramienta guía al clínico en la evaluación diagnóstica estructurada del TDAH según el DSM-5-TR.<br>
+        Cada criterio incluye ejemplos para facilitar la observación clínica.
+      </div>
+      <div class="autor-instrumento">
+        Instrumento adaptado por Psic. R. Josafat Acosta García | Tramas Escucha a Víctimas de Violencia, A.C.
+      </div>
+      <button type="button" class="start-btn" onclick="showWizard()">Iniciar evaluación</button>
+    </div>
+    <form id="wizardForm" autocomplete="off" style="display:none;">
+      <!-- CRITERIO A: Inatención -->
+      <div class="wizard-step active">
+        <span class="criterio-requisito">Seis (o más) de los siguientes síntomas (cinco en adultos ≥17 años) durante al menos 6 meses, en un grado que afecta actividades sociales y académicas/laborales. Ejemplos incluidos.</span>
+        <h2>Criterio A1: Inatención</h2>
+        <!-- ... igual que antes ... -->
+        <div class="input-group">
+          <label>a. Falla en prestar atención a detalles o por descuido comete errores en tareas escolares, trabajo u otras actividades.</label>
+          <span class="sub-label">Ejemplo: Omite detalles, pierde información importante, entrega trabajos incompletos o con errores por descuido.</span>
+          <select name="inatencion1" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <!-- ... resto de síntomas de inatención igual que antes ... -->
+        <div class="input-group">
+          <label>b. Dificultad para mantener la atención en tareas o actividades recreativas.</label>
+          <span class="sub-label">Ejemplo: Se distrae en clase, durante conversaciones o al leer; pierde el hilo de actividades largas.</span>
+          <select name="inatencion2" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>c. Parece no escuchar cuando se le habla directamente.</label>
+          <span class="sub-label">Ejemplo: No responde a preguntas directas, parece "en otro mundo" aun sin distracciones evidentes.</span>
+          <select name="inatencion3" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>d. No sigue instrucciones y no termina tareas escolares, quehaceres o deberes laborales.</label>
+          <span class="sub-label">Ejemplo: Deja trabajos a medias, inicia tareas y se evade fácilmente, olvida terminar actividades.</span>
+          <select name="inatencion4" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>e. Dificultad para organizar tareas y actividades.</label>
+          <span class="sub-label">Ejemplo: Desorganización frecuente, pierde materiales, mala gestión del tiempo, no cumple plazos.</span>
+          <select name="inatencion5" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>f. Evita, le disgusta o es poco entusiasta con tareas que requieren esfuerzo mental sostenido.</label>
+          <span class="sub-label">Ejemplo: Evita trabajos escolares, preparar informes, completar formularios, revisar documentos largos.</span>
+          <select name="inatencion6" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>g. Pierde cosas necesarias para tareas o actividades.</label>
+          <span class="sub-label">Ejemplo: Extravía útiles escolares, llaves, cartera, documentos, gafas, móvil.</span>
+          <select name="inatencion7" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>h. Se distrae fácilmente por estímulos externos.</label>
+          <span class="sub-label">Ejemplo: Interrumpe tareas por sonidos, personas, pensamientos ajenos a la tarea.</span>
+          <select name="inatencion8" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>i. Olvida actividades cotidianas.</label>
+          <span class="sub-label">Ejemplo: Olvida hacer tareas, diligencias, devolver llamadas, pagar facturas, acudir a citas.</span>
+          <select name="inatencion9" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <!-- CRITERIO A2: Hiperactividad-Impulsividad (más ejemplos en cada ítem) -->
+      <div class="wizard-step">
+        <span class="criterio-requisito">Seis (o más) de los siguientes síntomas (cinco en adultos ≥17 años) durante al menos 6 meses, en un grado que afecta actividades sociales y académicas/laborales. <br>Varios ejemplos incluidos para guiar la evaluación.</span>
+        <h2>Criterio A2: Hiperactividad-Impulsividad</h2>
+        <div class="input-group">
+          <label>a. Juguetea con o golpea manos o pies, o se retuerce en el asiento.</label>
+          <span class="sub-label">
+            Ejemplos: Mueve las piernas constantemente, tamborilea en la mesa, no puede permanecer quieto en reuniones o clase, manipula objetos con frecuencia, hace ruidos con los dedos. Suele cambiar de postura repetidamente.
+          </span>
+          <select name="hiper1" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>b. Se levanta en situaciones en que se espera que permanezca sentado.</label>
+          <span class="sub-label">
+            Ejemplos: Se pone de pie en clase, en la oficina, en el cine, en la mesa familiar, en la iglesia, durante juntas. Busca excusas para caminar o moverse aunque no sea apropiado, cambia de lugar en el aula sin permiso.
+          </span>
+          <select name="hiper2" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>c. Corretea o trepa en situaciones inapropiadas (en adolescentes/adultos puede limitarse a inquietud).</label>
+          <span class="sub-label">
+            Ejemplos: Corre dentro de lugares cerrados, sube a muebles, escala bardas o árboles sin razón, inquietud motriz evidente en adolescentes/adultos (no pueden estar sentados, cruzan y descruzan piernas, golpean el piso con los pies, se levantan repetidas veces en una reunión).
+          </span>
+          <select name="hiper3" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>d. Incapaz de jugar o participar tranquilamente en actividades recreativas.</label>
+          <span class="sub-label">
+            Ejemplos: Hace ruido excesivo al jugar, interrumpe a otros, no puede mantener tono bajo; juegos de mesa o lectura compartida resultan difíciles porque no puede esperar su turno o guardar silencio; interrumpe constantemente el juego de otros niños o adultos.
+          </span>
+          <select name="hiper4" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>e. "Está ocupado", actúa como si "lo impulsara un motor".</label>
+          <span class="sub-label">
+            Ejemplos: No puede estar quieto mucho tiempo, otros perciben que "no para", corre de un lugar a otro, se muestra impaciente, cambia repentinamente de actividad sin motivo, habla rápido, parece siempre apurado, no tolera estar sentado en restaurantes o reuniones largas.
+          </span>
+          <select name="hiper5" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>f. Habla excesivamente.</label>
+          <span class="sub-label">
+            Ejemplos: Habla más que los demás, interrumpe, no puede guardar silencio aun cuando se le pide, da respuestas largas o fuera de contexto, comenta sobre todo lo que observa, interrumpe con comentarios irrelevantes.
+          </span>
+          <select name="hiper6" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>g. Responde inesperadamente o antes de que se haya concluido una pregunta.</label>
+          <span class="sub-label">
+            Ejemplos: Termina frases de otros, responde antes de terminar la pregunta, interrumpe diálogos, da respuestas precipitadas, interrumpe a los profesores o compañeros, se adelanta en juegos de preguntas.
+          </span>
+          <select name="hiper7" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>h. Le es difícil esperar su turno.</label>
+          <span class="sub-label">
+            Ejemplos: Se impacienta en filas, juegos, espera de turnos en clase o actividades, protesta cuando debe esperar su turno, trata de colarse en la fila, se muestra ansioso o molesto cuando otros van antes.
+          </span>
+          <select name="hiper8" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>i. Interrumpe o se inmiscuye con otros.</label>
+          <span class="sub-label">
+            Ejemplos: Se mete en conversaciones ajenas, usa objetos de otros sin permiso, interrumpe juegos, interviene en tareas de otros, toma decisiones sin consultar, interrumpe a maestros/familiares constantemente.
+          </span>
+          <select name="hiper9" required>
+            <option value="">Selecciona</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <!-- CRITERIO B: Síntomas presentes antes de los 12 años -->
+      <div class="wizard-step">
+        <h2>Criterio B: Inicio temprano</h2>
+        <div class="input-group">
+          <label>¿Algunos síntomas de inatención o hiperactividad-impulsividad estaban presentes antes de los 12 años?</label>
+          <span class="sub-label">Ejemplo: Reportes escolares, familiares o personales de síntomas previos a los 12 años.</span>
+          <select name="criterioB" required>
+            <option value="">Selecciona opción</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <!-- CRITERIO C: Dos o más contextos -->
+      <div class="wizard-step">
+        <h2>Criterio C: Presencia en dos o más contextos</h2>
+        <div class="input-group">
+          <label>¿Varios síntomas están presentes en dos o más contextos?</label>
+          <span class="sub-label">Ejemplo: En casa y escuela, o trabajo y relaciones sociales.</span>
+          <select name="criterioC" required>
+            <option value="">Selecciona opción</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <!-- CRITERIO D: Interferencia funcional -->
+      <div class="wizard-step">
+        <h2>Criterio D: Interferencia con funcionamiento</h2>
+        <div class="input-group">
+          <label>¿Los síntomas interfieren con el funcionamiento social, académico o laboral, o reducen la calidad de los mismos?</label>
+          <span class="sub-label">Ejemplo: Bajo rendimiento escolar/laboral, dificultad para mantener relaciones, problemas de conducta.</span>
+          <select name="criterioD" required>
+            <option value="">Selecciona opción</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <!-- CRITERIO E: No explicado mejor por otro trastorno (más ejemplos) -->
+      <div class="wizard-step">
+        <h2>Criterio E: No explicado mejor por otro trastorno</h2>
+        <div class="input-group">
+          <label>¿Los síntomas no se producen exclusivamente durante esquizofrenia u otro trastorno psicótico y no se explican mejor por otro trastorno mental?</label>
+          <span class="sub-label">
+            Ejemplos para el clínico: 
+            <ul>
+              <li>¿Los síntomas solo aparecen durante episodios depresivos o ansiosos intensos? Si es así, considere trastorno depresivo/ansiedad como principal.</li>
+              <li>¿Las dificultades atencionales aparecen solo durante el consumo o abstinencia de sustancias?</li>
+              <li>¿Los síntomas de hiperactividad/impulsividad coinciden con episodios de manía o psicosis?</li>
+              <li>¿Hay presencia de delirios, alucinaciones o síntomas negativos típicos de esquizofrenia?</li>
+              <li>¿Se explican mejor por trastornos de la personalidad (límite, antisocial), trastornos obsesivo-compulsivos o trauma?</li>
+              <li>Para el paciente: Sea lo más abierto posible sobre otras dificultades emocionales, consumo de sustancias u otras experiencias relevantes.</li>
+            </ul>
+          </span>
+          <select name="criterioE" required>
+            <option value="">Selecciona opción</option>
+            <option value="sí">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <!-- ESPECIFICADOR DE PRESENTACIÓN -->
+      <div class="wizard-step">
+        <h2>Especificador de presentación (DSM-5-TR)</h2>
+        <div class="input-group">
+          <label>Presentación clínica en los últimos 6 meses</label>
+          <select name="presentacion" required>
+            <option value="">Selecciona presentación</option>
+            <option value="Combinada">Combinada (se cumplen inatención e hiperactividad-impulsividad)</option>
+            <option value="Predominantemente inatento">Predominantemente inatento (solo inatención)</option>
+            <option value="Predominantemente hiperactivo/impulsivo">Predominantemente hiperactivo/impulsivo (solo hiperactividad-impulsividad)</option>
+            <option value="En remisión parcial">En remisión parcial (síntomas previos, pero no todos los criterios en últimos 6 meses, sigue afectando funcionamiento)</option>
+          </select>
+        </div>
+      </div>
+      <!-- ESPECIFICADOR DE GRAVEDAD -->
+      <div class="wizard-step">
+        <h2>Especificador de gravedad</h2>
+        <div class="input-group">
+          <label>Gravedad actual</label>
+          <span class="sub-label">
+            <b>Leve:</b> Pocos o ningún síntoma adicional, deterioro mínimo.<br>
+            <b>Moderado:</b> Entre leve y grave.<br>
+            <b>Grave:</b> Muchos síntomas adicionales, síntomas graves o deterioro notable.<br>
+          </span>
+          <select name="gravedad" required>
+            <option value="">Selecciona gravedad</option>
+            <option value="Leve">Leve</option>
+            <option value="Moderado">Moderado</option>
+            <option value="Grave">Grave</option>
+          </select>
+        </div>
+      </div>
+      <!-- REGISTRO Y COMORBILIDAD (catálogo DSM-5 y texto libre) -->
+      <div class="wizard-step">
+        <h2>Especificadores y comorbilidad</h2>
+        <div class="input-group">
+          <label>Discapacidad intelectual asociada</label>
+          <select name="discapacidadIntelectual" required>
+            <option value="">Selecciona</option>
+            <option value="Sí">Sí</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Trastornos de aprendizaje asociados</label>
+          <select name="trastornoAprendizaje" required>
+            <option value="">Selecciona</option>
+            <option value="Sí">Sí</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Otros trastornos asociados (selecciona los que estén presentes):</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="otrosTrastornos" value="Trastorno negativista desafiante"> Trastorno negativista desafiante</label>
+            <label><input type="checkbox" name="otrosTrastornos" value="Trastorno de conducta"> Trastorno de conducta</label>
+            <label><input type="checkbox" name="otrosTrastornos" value="Trastorno de desregulación disruptiva del estado de ánimo"> Trastorno de desregulación disruptiva del estado de ánimo</label>
+            <label><input type="checkbox" name="otrosTrastornos" value="Trastorno específico del aprendizaje"> Trastorno específico del aprendizaje</label>
+            <label><input type="checkbox" name="otrosTrastornos" value="Trastorno de depresión mayor"> Trastorno de depresión mayor</label>
+            <label><input type="checkbox" name="otrosTrastornos" value="Trastorno explosivo intermitente"> Trastorno explosivo intermitente</label>
+            <label><input type="checkbox" name="otrosTrastornos" value="Trastornos por consumo de sustancias"> Trastornos por consumo de sustancias</label>
+            <label><input type="checkbox" name="otrosTrastornos" value="Trastorno de la personalidad antisocial"> Trastorno de la personalidad antisocial</label>
+            <label><input type="checkbox" name="otrosTrastornos" value="Trastorno obsesivo-compulsivo"> Trastorno obsesivo-compulsivo</label>
+            <label><input type="checkbox" name="otrosTrastornos" value="Trastorno de tics"> Trastorno de tics</label>
+            <label><input type="checkbox" name="otrosTrastornos" value="Trastorno del espectro autista"> Trastorno del espectro autista</label>
+          </div>
+          <input type="text" name="otrosTrastornosOtros" placeholder="Otro trastorno asociado (especificar)">
+        </div>
+      </div>
+      <!-- CARACTERÍSTICAS DIAGNÓSTICAS -->
+      <div class="wizard-step">
+        <h2>Características diagnósticas</h2>
+        <div class="input-group">
+          <label>Ejemplos de dificultades observadas (atención/impulsividad):</label>
+          <textarea name="caracteristicasDiagnosticas"></textarea>
+        </div>
+      </div>
+      <!-- ... resto de pasos igual ... -->
+      <div class="wizard-step">
+        <h2>Características asociadas</h2>
+        <div class="input-group">
+          <label>¿Hay otras características asociadas? (problemas emocionales, sueño, motoras, etc.)</label>
+          <textarea name="caracteristicasAsociadas"></textarea>
+        </div>
+      </div>
+      <div class="wizard-step">
+        <h2>Desarrollo y curso</h2>
+        <div class="input-group">
+          <label>¿A qué edad se detectaron los primeros síntomas? Describe el curso:</label>
+          <textarea name="desarrolloCurso"></textarea>
+        </div>
+      </div>
+      <div class="wizard-step">
+        <h2>Factores de riesgo y pronóstico</h2>
+        <div class="input-group">
+          <label>Factores de riesgo identificados:</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="factoresRiesgo" value="Antecedentes familiares de TDAH"> Antecedentes familiares de TDAH</label>
+            <label><input type="checkbox" name="factoresRiesgo" value="Bajo peso al nacer"> Bajo peso al nacer</label>
+            <label><input type="checkbox" name="factoresRiesgo" value="Exposición prenatal a tabaco/alcohol/drogas"> Exposición prenatal a tabaco/alcohol/drogas</label>
+            <label><input type="checkbox" name="factoresRiesgo" value="Complicaciones perinatales"> Complicaciones perinatales</label>
+            <label><input type="checkbox" name="factoresRiesgo" value="Condición genética"> Condición genética</label>
+          </div>
+          <input type="text" name="factoresRiesgoOtros" placeholder="Otros factores de riesgo (opcional)">
+        </div>
+        <div class="input-group">
+          <label>Pronóstico esperado</label>
+          <textarea name="pronostico"></textarea>
+        </div>
+      </div>
+      <div class="wizard-step">
+        <h2>Diagnóstico diferencial</h2>
+        <div class="input-group">
+          <label>¿Se consideraron otros diagnósticos? (marca los que aplican)</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="Trastorno negativista desafiante"> Trastorno negativista desafiante</label>
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="Trastorno explosivo intermitente"> Trastorno explosivo intermitente</label>
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="Trastorno de ansiedad"> Trastorno de ansiedad</label>
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="Trastorno depresivo"> Trastorno depresivo</label>
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="Trastorno del aprendizaje"> Trastorno del aprendizaje</label>
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="Trastorno del espectro autista"> Trastorno del espectro autista</label>
+            <label><input type="checkbox" name="diagnosticoDiferencial" value="Trastornos relacionados con sustancias"> Trastornos relacionados con sustancias</label>
+          </div>
+          <input type="text" name="diagnosticoDiferencialOtros" placeholder="Otros diagnósticos diferenciales (opcional)">
+        </div>
+        <div class="input-group">
+          <label>¿Por qué se descartaron los diagnósticos diferenciales seleccionados?</label>
+          <textarea name="descartarDiferencial"></textarea>
+        </div>
+      </div>
+      <div class="wizard-step">
+        <h2>Resumen</h2>
+        <div id="resultado" class="result-section"></div>
+        <div class="final-credit">
+          Instrumento adaptado por Psic. R. Josafat Acosta García | Tramas Escucha a Víctimas de Violencia, A.C.
+        </div>
+      </div>
+      <div class="wizard-buttons">
+        <button type="button" class="back-btn" onclick="prevStep()">Anterior</button>
+        <button type="button" onclick="nextStep()" id="nextBtn">Siguiente</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    let steps = [];
+    let currentStep = 0;
+    const progressBar = document.getElementById('progressBar');
+    const nextBtn = document.getElementById('nextBtn');
+    const backBtn = document.querySelector('.back-btn');
+    const wizardForm = document.getElementById('wizardForm');
+    const introScreen = document.getElementById('introScreen');
+
+    function showWizard() {
+      introScreen.style.display = "none";
+      wizardForm.style.display = "block";
+      if (steps.length === 0) {
+        document.querySelectorAll('.wizard-step').forEach((step, i) => {
+          if (!step.classList.contains('presentacion-instrumento')) steps.push(step);
+        });
+      }
+      currentStep = 0;
+      showStep(currentStep);
+    }
+
+    function showStep(idx) {
+      steps.forEach((step, i) => step.classList.toggle('active', i === idx));
+      backBtn.style.display = idx === 0 ? "none" : "inline-block";
+      nextBtn.style.display = "inline-block";
+      nextBtn.textContent = (idx === steps.length - 2) ? 'Finalizar' : (idx === steps.length - 1 ? 'Reiniciar' : 'Siguiente');
+      progressBar.style.width = (idx/(steps.length-1)*100) + "%";
+    }
+
+    function nextStep() {
+      if (currentStep < steps.length - 2) {
+        // Validar campos requeridos del paso actual
+        const fields = steps[currentStep].querySelectorAll('select[required], textarea[required], input[required]');
+        for (let field of fields) {
+          if (!field.value) {
+            field.focus();
+            field.style.borderColor = "#e74c3c";
+            setTimeout(()=>{field.style.borderColor="#b6cffb"}, 1200);
+            return;
+          }
+        }
+        currentStep++;
+        showStep(currentStep);
+      } else if (currentStep === steps.length - 2) {
+        // Generar resumen
+        generarResumen();
+        currentStep++;
+        showStep(currentStep);
+        nextBtn.textContent = "Reiniciar";
+      } else {
+        // Reiniciar: volver a la pantalla de presentación
+        wizardForm.reset();
+        wizardForm.style.display = "none";
+        introScreen.style.display = "flex";
+        document.getElementById('resultado').innerHTML = "";
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 0) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    }
+
+    function generarResumen() {
+      const f = document.getElementById('wizardForm');
+      let resumen = "<b>Criterio A1 (Inatención):</b><ul>";
+      for (let i = 1; i <= 9; i++) {
+        resumen += `<li>${String.fromCharCode(96+i)}. <b>${f['inatencion'+i].value}</b></li>`;
+      }
+      resumen += "</ul><b>Criterio A2 (Hiperactividad/Impulsividad):</b><ul>";
+      for (let i = 1; i <= 9; i++) {
+        resumen += `<li>${String.fromCharCode(96+i)}. <b>${f['hiper'+i].value}</b></li>`;
+      }
+      resumen += "</ul>";
+      resumen += "<b>Criterio B (Síntomas antes de los 12 años):</b> " + (f.criterioB.value || "No especificado") + "<br>";
+      resumen += "<b>Criterio C (Presencia en ≥2 contextos):</b> " + (f.criterioC.value || "No especificado") + "<br>";
+      resumen += "<b>Criterio D (Interferencia funcional):</b> " + (f.criterioD.value || "No especificado") + "<br>";
+      resumen += "<b>Criterio E (No explicado mejor por otro trastorno):</b> " + (f.criterioE.value || "No especificado") + "<br>";
+      resumen += "<b>Presentación clínica:</b> " + (f.presentacion.value || "No especificado") + "<br>";
+      resumen += "<b>Gravedad:</b> " + (f.gravedad.value || "No especificado") + "<br>";
+      resumen += "<b>Discapacidad intelectual asociada:</b> " + (f.discapacidadIntelectual.value || "No especificado") + "<br>";
+      resumen += "<b>Trastornos de aprendizaje asociados:</b> " + (f.trastornoAprendizaje.value || "No especificado") + "<br>";
+      // Otros trastornos asociados (catálogo + texto libre)
+      let otrosTrastornosSel = [];
+      document.querySelectorAll('input[name="otrosTrastornos"]:checked').forEach(el => { otrosTrastornosSel.push(el.value); });
+      if (f.otrosTrastornosOtros.value) otrosTrastornosSel.push(f.otrosTrastornosOtros.value);
+      resumen += "<b>Otros trastornos asociados:</b><br>" + (otrosTrastornosSel.length ? otrosTrastornosSel.join(', ') : "No especificado") + "<br>";
+      resumen += "<b>Características diagnósticas:</b><br>" + (f.caracteristicasDiagnosticas.value||"") + "<br>";
+      resumen += "<b>Características asociadas:</b><br>" + (f.caracteristicasAsociadas.value||"") + "<br>";
+      resumen += "<b>Desarrollo y curso:</b><br>" + (f.desarrolloCurso.value||"") + "<br>";
+
+      // Factores de riesgo
+      let factoresRiesgoSel = [];
+      document.querySelectorAll('input[name="factoresRiesgo"]:checked').forEach(el => { factoresRiesgoSel.push(el.value); });
+      if (f.factoresRiesgoOtros.value) factoresRiesgoSel.push(f.factoresRiesgoOtros.value);
+      resumen += "<b>Factores de riesgo:</b><br>" + (factoresRiesgoSel.length ? factoresRiesgoSel.join(', ') : "No especificado") + "<br>";
+      resumen += "<b>Pronóstico:</b><br>" + (f.pronostico.value||"") + "<br>";
+
+      // Diagnóstico diferencial
+      let diagDiffSel = [];
+      document.querySelectorAll('input[name="diagnosticoDiferencial"]:checked').forEach(el => { diagDiffSel.push(el.value); });
+      if (f.diagnosticoDiferencialOtros.value) diagDiffSel.push(f.diagnosticoDiferencialOtros.value);
+      resumen += "<b>Diagnóstico diferencial:</b><br>" + (diagDiffSel.length ? diagDiffSel.join(', ') : "No especificado") + "<br>";
+      resumen += "<b>Motivo de descarte:</b><br>" + (f.descartarDiferencial.value||"") + "<br>";
+
+      document.getElementById('resultado').innerHTML = resumen;
+    }
+  </script>
+</body>
+</html>
