@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Diagnóstico del Trastorno por Déficit de Atención/Hiperactividad (TDAH) - DSM-5-TR</title>
+    <!-- Google Fonts & Material Icons -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --accent: #e74c3c;
+            --warning: #f39c12;
+            --dark: #222c33;
+            --light: #f9f9f9;
+            --surface: #fff;
+            --shadow: 0 4px 24px rgba(40, 70, 100, 0.09);
+            --radius: 18px;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #222c33;
+            margin: 0;
+            background: linear-gradient(135deg, #e0ecff 0%, #f4f9ff 100%);
+            min-height: 100vh;
+            padding: 0;
+        }
+        header {
+            background: linear-gradient(120deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 32px 16px 24px 16px;
+            border-radius: 0 0 var(--radius) var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.3em;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+        header p {
+            font-size: 1.08em;
+            margin: 10px 0 0 0;
+            color: #e6e6e6;
+        }
+        /* Modern tabs */
+        .tab-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: var(--surface);
+            margin: 24px auto 0 auto;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            max-width: 95vw;
+            overflow: hidden;
+        }
+        .tab {
+            flex: 1;
+            padding: 16px 0;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1.08em;
+            font-weight: 600;
+            color: var(--dark);
+            transition: background 0.2s, color 0.2s;
+            outline: none;
+            position: relative;
+        }
+        .tab.active {
+            background: linear-gradient(90deg, var(--primary) 60%, var(--secondary) 100%);
+            color: white;
+        }
+        .tab:not(.active):hover {
+            background: #f2f6fa;
+        }
+        .tab-content {
+            display: none;
+            background: var(--surface);
+            border-radius: var(--radius);
+            margin: 22px auto;
+            padding: 22px 18px;
+            max-width: 600px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.3s;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px);}
+            to { opacity: 1; transform: none;}
+        }
+        /* Criteria cards */
+        .criteria-container {
+            margin-bottom: 22px;
+            background: linear-gradient(90deg, #e0ecff 60%, #dff9e2 100%);
+            border-left: 6px solid var(--primary);
+            padding: 18px 16px 15px 16px;
+            border-radius: var(--radius);
+            box-shadow: 0 1px 6px rgba(40,70,100,0.04);
+        }
+        .criteria-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+        /* Instrument Cards Modern */
+        .instrument-card {
+            background: linear-gradient(105deg, #fff 70%, #e7f7fa 100%);
+            border-radius: var(--radius);
+            padding: 15px 16px;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 8px rgba(40,70,100,0.08);
+            border-left: 5px solid var(--secondary);
+            position: relative;
+            transition: box-shadow .2s, transform .2s;
+        }
+        .instrument-card:hover {
+            box-shadow: 0 6px 14px rgba(40,70,100,0.15);
+            transform: translateY(-2px) scale(1.015);
+        }
+        .instrument-name {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.12em;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .instrument-name .material-icons {
+            margin-right: 6px;
+            font-size: 20px;
+            color: var(--secondary);
+        }
+        /* Quiz Modernization */
+        .quiz-container {
+            margin-top: 24px;
+        }
+        .quiz-levels {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+        .quiz-level {
+            padding: 12px 24px;
+            margin: 0 6px;
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1em;
+            letter-spacing: 0.4px;
+            background: #ececec;
+            color: var(--dark);
+            border: 2px solid transparent;
+            box-shadow: 0 1px 4px rgba(40,70,100,0.07);
+            transition: all 0.25s;
+            user-select: none;
+        }
+        .quiz-level.inicial { border-color: var(--primary); }
+        .quiz-level.medio { border-color: var(--warning); }
+        .quiz-level.superior { border-color: var(--accent);}
+        .quiz-level.active {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: 2px solid var(--primary);
+            transform: scale(1.07);
+            box-shadow: 0 3px 14px rgba(41,128,185,0.11);
+        }
+        .quiz-question {
+            background: var(--surface);
+            padding: 18px 12px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            box-shadow: 0 2px 10px rgba(41,128,185,0.08);
+            position: relative;
+            animation: fadeIn 0.3s;
+        }
+        .quiz-question p {
+            font-weight: 600;
+            margin-bottom: 14px;
+            font-size: 1.07em;
+        }
+        .quiz-options {
+            margin-top: 6px;
+        }
+        .quiz-option {
+            margin-bottom: 10px;
+            padding: 12px 16px;
+            font-size: 1em;
+            background: #f6fafd;
+            border-radius: 50px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.18s;
+            user-select: none;
+            position: relative;
+        }
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: linear-gradient(90deg, #e3f1ff 60%, #e0fbe8 100%);
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .quiz-option.correct {
+            background: linear-gradient(90deg, #d9fbe7 65%, #a8e9ce 100%);
+            color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        .quiz-option.incorrect {
+            background: linear-gradient(90deg, #ffeaea 65%, #ffd3d3 100%);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+        .quiz-feedback {
+            margin-top: 10px;
+            padding: 12px 14px;
+            border-radius: 50px;
+            font-size: 0.98em;
+            display: none;
+        }
+        .quiz-feedback.correct {
+            background: #e0f8e8;
+            color: #185d3c;
+            display: block;
+        }
+        .quiz-feedback.incorrect {
+            background: #fbeaea;
+            color: #b82d2d;
+            display: block;
+        }
+        .quiz-results {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 1.15em;
+            font-weight: bold;
+            display: none;
+            background: linear-gradient(90deg, #b9e2fa 60%, #c8f8e5 100%);
+            border-radius: 50px;
+            padding: 12px;
+            color: var(--primary);
+        }
+        .btn {
+            padding: 12px 28px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.04em;
+            margin-top: 10px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(41,128,185,0.09);
+            transition: background 0.18s, box-shadow 0.18s, transform 0.13s;
+        }
+        .btn:active { transform: scale(0.97);}
+        .btn:hover, .btn:focus { filter: brightness(1.12);}
+        .btn-check {
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+        }
+        .btn-reset {
+            background: linear-gradient(90deg, var(--accent), #ff887d);
+        }
+        .btn-reset:hover {
+            background: linear-gradient(90deg, #c0392b, #ff887d);
+        }
+        .hidden { display: none !important; }
+        /* Referencias y Footer */
+        .references {
+            margin-top: 40px;
+            font-size: 0.93em;
+            color: #666;
+            padding: 20px 12px 0 12px;
+            background: #e8f1fa;
+            border-radius: var(--radius);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 1px 6px rgba(40,70,100,0.04);
+        }
+        .references h2 {
+            color: var(--primary);
+            font-size: 1.1em;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+        footer {
+            text-align: center;
+            margin-top: 36px;
+            padding: 18px 10px 22px 10px;
+            color: #666;
+            border-top: 1px solid #e8e8e8;
+            font-size: 0.97em;
+            background: #f7fcff;
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        /* Floating Action Button for Help */
+        .fab-help {
+            position: fixed;
+            bottom: 22px;
+            right: 20px;
+            background: linear-gradient(120deg, var(--primary), var(--accent));
+            color: #fff;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            box-shadow: 0 3px 18px rgba(41,128,185,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            cursor: pointer;
+            transition: box-shadow 0.18s, background 0.18s;
+            z-index: 50;
+        }
+        .fab-help:active { box-shadow: 0 1px 6px rgba(41,128,185,0.10);}
+        /* Responsive Design */
+        @media (max-width: 700px) {
+            header { padding: 22px 5vw 20px 5vw; font-size: 1em;}
+            .tab-container, .tab-content, .references { max-width: 98vw; }
+            .tab-content, .references { padding: 18px 4vw;}
+        }
+        @media (max-width: 480px) {
+            h1 { font-size: 1.4em;}
+            .tab-content, .references { padding: 12px 2vw;}
+            .quiz-level { font-size: 0.95em; padding: 10px 8px;}
+            .fab-help { width: 48px; height: 48px; font-size: 1.4em;}
+        }
+        /* Animated highlight on correct answer */
+        .quiz-option.correct::after {
+            content: "✔";
+            position: absolute;
+            right: 18px;
+            top: 12px;
+            color: var(--secondary);
+            font-size: 1.2em;
+            animation: pop 0.3s;
+        }
+        .quiz-option.incorrect::after {
+            content: "✖";
+            position: absolute;
+            right: 18px;
+            top: 12px;
+            color: var(--accent);
+            font-size: 1.2em;
+            animation: pop 0.3s;
+        }
+        @keyframes pop {
+            0% { transform: scale(0.5);}
+            60% { transform: scale(1.2);}
+            100% { transform: scale(1);}
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><span class="material-icons" style="vertical-align: middle; font-size: 1.1em;">psychology</span> Diagnóstico del Trastorno por Déficit de Atención/Hiperactividad (TDAH)</h1>
+        <p>Según los criterios del DSM-5-TR y herramientas de evaluación</p>
+    </header>
+
+    <div class="tab-container">
+        <button class="tab active" onclick="openTab(event, 'criterios')"><span class="material-icons" style="vertical-align: middle;">fact_check</span> <span style="vertical-align: middle;">Criterios</span></button>
+        <button class="tab" onclick="openTab(event, 'instrumentos')"><span class="material-icons" style="vertical-align: middle;">medical_services</span> <span style="vertical-align: middle;">Instrumentos</span></button>
+        <button class="tab" onclick="openTab(event, 'evaluacion')"><span class="material-icons" style="vertical-align: middle;">quiz</span> <span style="vertical-align: middle;">Evaluación</span></button>
+    </div>
+
+    <div id="criterios" class="tab-content active">
+        <h2>Criterios diagnósticos del TDAH según el DSM-5-TR</h2>
+        
+        <div class="criteria-container">
+            <div class="criteria-title"><span class="material-icons" style="vertical-align: middle; color:var(--primary);">flash_on</span> A. Patrón persistente de inatención y/o hiperactividad-impulsividad</div>
+            <p><strong>Inatención (≥6 síntomas para menores de 17 años, ≥5 para mayores):</strong></p>
+            <ol>
+                <li>No presta atención suficiente a detalles o comete errores por descuido.</li>
+                <li>Dificultad para mantener la atención en tareas o actividades lúdicas.</li>
+                <li>Parece no escuchar cuando se le habla directamente.</li>
+                <li>No sigue instrucciones y no termina tareas escolares o laborales.</li>
+                <li>Dificultad para organizar tareas y actividades.</li>
+                <li>Evita o le disgustan tareas que requieren esfuerzo mental sostenido.</li>
+                <li>Pierde objetos necesarios para tareas o actividades.</li>
+                <li>Se distrae fácilmente por estímulos externos.</li>
+                <li>Olvida actividades cotidianas.</li>
+            </ol>
+            
+            <p><strong>Hiperactividad-impulsividad (≥6 síntomas para menores de 17 años, ≥5 para mayores):</strong></p>
+            <ol>
+                <li>Mueve o retuerce manos/pies o se remueve en el asiento.</li>
+                <li>Abandona su asiento en situaciones que debe permanecer sentado.</li>
+                <li>Corre o trepa en situaciones inapropiadas (en adolescentes/adultos, inquietud).</li>
+                <li>Incapacidad para jugar o realizar actividades tranquilamente.</li>
+                <li>"Está en marcha" o actúa como "impulsado por un motor".</li>
+                <li>Habla en exceso.</li>
+                <li>Responde inesperadamente o antes de que se complete la pregunta.</li>
+                <li>Dificultad para esperar su turno.</li>
+                <li>Interrumpe o se inmiscuye en actividades de otros.</li>
+            </ol>
+        </div>
+
+        <div class="criteria-container">
+            <div class="criteria-title"><span class="material-icons" style="vertical-align: middle; color:var(--primary);">info</span> Otros criterios:</div>
+            <p><strong>B.</strong> Varios síntomas estaban presentes antes de los 12 años.</p>
+            <p><strong>C.</strong> Varios síntomas están presentes en dos o más contextos (ej., casa, escuela, trabajo).</p>
+            <p><strong>D.</strong> Evidencia clara de interferencia con el funcionamiento social, académico o laboral.</p>
+            <p><strong>E.</strong> Los síntomas no ocurren exclusivamente durante el curso de esquizofrenia u otro trastorno psicótico.</p>
+            <p><strong>Especificar:</strong> Presentación combinada, predominante con inatención, o predominante hiperactiva/impulsiva.</p>
+        </div>
+    </div>
+
+    <div id="instrumentos" class="tab-content">
+        <h2>Instrumentos para el diagnóstico de TDAH</h2>
+        
+        <div class="instrument-card">
+            <div class="instrument-name"><span class="material-icons">assignment</span> Conners CBRS (Conners Comprehensive Behavior Rating Scales)</div>
+            <p><strong>Uso:</strong> Evaluación multidimensional que mide síntomas de TDAH y problemas conductuales, sociales y académicos.</p>
+            <p><strong>Edad:</strong> 6-18 años (versiones para padres, maestros y autoinforme).</p>
+            <p><strong>Características:</strong> Evalúa síntomas según DSM-5, con perfiles específicos para TDAH.</p>
+        </div>
+
+        <div class="instrument-card">
+            <div class="instrument-name"><span class="material-icons">record_voice_over</span> SNAP-IV (Swanson, Nolan and Pelham Rating Scale)</div>
+            <p><strong>Uso:</strong> Escala de evaluación para síntomas de TDAH y trastorno oposicionista desafiante.</p>
+            <p><strong>Edad:</strong> 6-18 años (versiones para padres y maestros).</p>
+            <p><strong>Características:</strong> Basado en criterios DSM, breve y fácil de aplicar.</p>
+        </div>
+
+        <div class="instrument-card">
+            <div class="instrument-name"><span class="material-icons">child_care</span> Vanderbilt ADHD Diagnostic Parent/Teacher Rating Scale</div>
+            <p><strong>Uso:</strong> Evaluación de síntomas de TDAH y problemas de rendimiento académico/conductual.</p>
+            <p><strong>Edad:</strong> 6-12 años.</p>
+            <p><strong>Características:</strong> Incluye evaluación de comorbilidades frecuentes.</p>
+        </div>
+
+        <div class="instrument-card">
+            <div class="instrument-name"><span class="material-icons">school</span> Escalas complementarias</div>
+            <p><strong>Evaluación cognitiva:</strong> WISC-V, WAIS-IV</p>
+            <p><strong>Evaluación ejecutiva:</strong> BRIEF-2, Stroop, Trail Making Test</p>
+            <p><strong>Evaluación académica:</strong> WIAT-III, Batería Woodcock-Johnson</p>
+        </div>
+    </div>
+
+    <div id="evaluacion" class="tab-content">
+        <h2>Evaluación de conocimientos sobre TDAH</h2>
+        <p>Selecciona tu nivel de conocimiento para realizar la evaluación correspondiente:</p>
+        
+        <div class="quiz-levels">
+            <div class="quiz-level inicial" onclick="selectQuizLevel('inicial',event)">Inicial</div>
+            <div class="quiz-level medio" onclick="selectQuizLevel('medio',event)">Medio</div>
+            <div class="quiz-level superior" onclick="selectQuizLevel('superior',event)">Superior</div>
+        </div>
+
+        <!-- Nivel Inicial -->
+        <div id="quiz-inicial" class="quiz-container hidden">
+            <h3>Nivel Inicial</h3>
+            
+            <div class="quiz-question" data-correct="b">
+                <p>1. ¿Cuál de los siguientes es un síntoma de inatención en el TDAH según el DSM-5-TR?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) Habla en exceso</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) Dificultad para organizar tareas</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) Interrumpe conversaciones</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) Corre o trepa en situaciones inapropiadas</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>b) Dificultad para organizar tareas</strong>. Este es un síntoma de inatención, mientras que las otras opciones son síntomas de hiperactividad/impulsividad.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <div class="quiz-question" data-correct="a">
+                <p>2. ¿Qué instrumento se utiliza comúnmente para evaluar TDAH en niños mediante informes de padres y maestros?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) Escala Conners</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) MMPI-2</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) Rorschach</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) Ninguno de los anteriores</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>a) Escala Conners</strong>. Esta es una de las escalas más utilizadas para evaluar TDAH en niños mediante informes de padres y maestros.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <div class="quiz-question" data-correct="c">
+                <p>3. ¿A qué edad deben haber aparecido los primeros síntomas de TDAH según el DSM-5-TR?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) 18 años</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) 5 años</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) 12 años</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) No hay requisito de edad</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>c) 12 años</strong>. El DSM-5-TR requiere que varios síntomas estén presentes antes de los 12 años para el diagnóstico de TDAH.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <button class="btn btn-reset" onclick="resetQuiz('inicial')"><span class="material-icons" style="vertical-align: middle;">restart_alt</span> Reiniciar</button>
+            <div class="quiz-results"></div>
+        </div>
+
+        <!-- Nivel Medio -->
+        <div id="quiz-medio" class="quiz-container hidden">
+            <h3>Nivel Medio</h3>
+            
+            <div class="quiz-question" data-correct="b">
+                <p>1. ¿Cuántos síntomas de inatención se requieren para diagnosticar TDAH en un adolescente de 16 años según el DSM-5-TR?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) 6 (igual que en niños pequeños)</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) 5</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) 4</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) 3</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>b) 5</strong>. Para adolescentes mayores de 17 años y adultos, el DSM-5-TR requiere al menos 5 síntomas (en lugar de 6 para niños menores).
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <div class="quiz-question" data-correct="d">
+                <p>2. ¿Cuál de estos NO es un criterio diagnóstico del TDAH según el DSM-5-TR?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) Síntomas presentes en dos o más contextos</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) Interferencia con el funcionamiento social/académico</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) Síntomas presentes antes de los 12 años</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) Coeficiente intelectual inferior a 70</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>d) Coeficiente intelectual inferior a 70</strong>. El TDAH puede presentarse en cualquier nivel intelectual, y el CI no es un criterio diagnóstico.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <div class="quiz-question" data-correct="a">
+                <p>3. ¿Qué cambio importante introdujo el DSM-5 respecto al diagnóstico de TDAH en comparación con el DSM-IV?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) Aumentó el límite de edad para la aparición de síntomas de 7 a 12 años</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) Eliminó el subtipo de presentación combinada</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) Redujo el número de síntomas necesarios para adultos</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) Añadió requisitos de pruebas neuropsicológicas</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>a) Aumentó el límite de edad para la aparición de síntomas de 7 a 12 años</strong>. Este fue uno de los cambios más significativos en el DSM-5.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <button class="btn btn-reset" onclick="resetQuiz('medio')"><span class="material-icons" style="vertical-align: middle;">restart_alt</span> Reiniciar</button>
+            <div class="quiz-results"></div>
+        </div>
+
+        <!-- Nivel Superior -->
+        <div id="quiz-superior" class="quiz-container hidden">
+            <h3>Nivel Superior</h3>
+            
+            <div class="quiz-question" data-correct="c">
+                <p>1. Un adolescente de 15 años muestra 5 síntomas de inatención y 4 de hiperactividad-impulsividad, con deterioro académico pero buen funcionamiento social. ¿Cuál sería el diagnóstico más apropiado?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) TDAH presentación combinada</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) TDAH presentación predominante hiperactiva/impulsiva</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) TDAH presentación predominante con falta de atención</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) No cumple criterios para TDAH</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>c) TDAH presentación predominante con falta de atención</strong>. Cumple con los 5 síntomas requeridos de inatención (pero no los 6 de hiperactividad/impulsividad para menores de 17 años) y hay deterioro significativo.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <div class="quiz-question" data-correct="b">
+                <p>2. ¿Qué instrumento sería MÁS adecuado para evaluar funciones ejecutivas en un niño con posible TDAH?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) MMPI-A</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) BRIEF-2</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) Rorschach</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) TAT</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>b) BRIEF-2</strong>. Esta escala evalúa específicamente funciones ejecutivas en la vida diaria, muy relevante para TDAH.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <div class="quiz-question" data-correct="d">
+                <p>3. ¿Qué evaluación complementaria sería MÁS relevante para un adolescente con posible TDAH y bajo rendimiento escolar?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectOption(this)">a) Electroencefalograma</div>
+                    <div class="quiz-option" onclick="selectOption(this)">b) Resonancia magnética</div>
+                    <div class="quiz-option" onclick="selectOption(this)">c) Análisis de sangre completo</div>
+                    <div class="quiz-option" onclick="selectOption(this)">d) Evaluación psicopedagógica/académica</div>
+                </div>
+                <div class="quiz-feedback">
+                    La respuesta correcta es <strong>d) Evaluación psicopedagógica/académica</strong>. Esto ayudaría a determinar el impacto del TDAH en el aprendizaje y planificar intervenciones educativas.
+                </div>
+                <button class="btn btn-check" onclick="checkAnswer(this)">Verificar respuesta</button>
+            </div>
+
+            <button class="btn btn-reset" onclick="resetQuiz('superior')"><span class="material-icons" style="vertical-align: middle;">restart_alt</span> Reiniciar</button>
+            <div class="quiz-results"></div>
+        </div>
+    </div>
+
+    <div class="references">
+        <h2>Referencias</h2>
+        <p>American Psychiatric Association. (2022). <em>Diagnostic and statistical manual of mental disorders</em> (5th ed., text rev.).</p>
+        <p>Conners, C. K. (2008). <em>Conners Comprehensive Behavior Rating Scales (Conners CBRS)</em>. Multi-Health Systems.</p>
+        <p>Swanson, J. M., Nolan, W., & Pelham, W. E. (2012). <em>Swanson, Nolan and Pelham Rating Scale (SNAP-IV)</em>. University of California.</p>
+        <p>Wolraich, M. L., Lambert, W., Doffing, M. A., Bickman, L., Simmons, T., & Worley, K. (2003). <em>Vanderbilt ADHD Diagnostic Parent and Teacher Rating Scales</em>. Pediatrics, 111(3), 535-543.</p>
+        <p>Gioia, G. A., Isquith, P. K., Guy, S. C., & Kenworthy, L. (2015). <em>Behavior Rating Inventory of Executive Function, Second Edition (BRIEF-2)</em>. PAR.</p>
+    </div>
+
+    <footer>
+        <p>© 2023 Material educativo sobre diagnóstico de TDAH - DSM-5-TR</p>
+    </footer>
+
+    <!-- Floating Help Button (for future interactive features) -->
+    <div class="fab-help" title="¿Necesitas ayuda?" onclick="showHelpModal()">
+        <span class="material-icons">help_outline</span>
+    </div>
+
+    <!-- Simple Modal for help (optional, placeholder for future expansion) -->
+    <div id="help-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(40,60,90,0.22); z-index:99; align-items:center; justify-content:center;">
+        <div style="background:#fff; border-radius:18px; max-width:320px; margin:auto; padding:30px 22px; box-shadow:0 6px 32px rgba(0,0,0,0.20); text-align:center; position:relative;">
+            <span class="material-icons" style="font-size:2.5em; color:var(--primary); margin-bottom:10px;">help</span>
+            <h3 style="margin:0 0 8px 0;">¿Necesitas ayuda?</h3>
+            <p style="font-size:1.06em; margin-bottom:16px;">Navega entre pestañas, selecciona tu nivel en la evaluación y toca cada pregunta. ¡Interactúa y aprende!</p>
+            <button class="btn" style="padding:10px 28px;" onclick="closeHelpModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        // Pestañas
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+        // Quiz
+        function selectQuizLevel(level,evt) {
+            document.getElementById('quiz-inicial').classList.add('hidden');
+            document.getElementById('quiz-medio').classList.add('hidden');
+            document.getElementById('quiz-superior').classList.add('hidden');
+            document.getElementById('quiz-' + level).classList.remove('hidden');
+            var levels = document.querySelectorAll('.quiz-level');
+            levels.forEach(function(el) {
+                el.classList.remove('active');
+            });
+            if(evt && evt.currentTarget) evt.currentTarget.classList.add('active');
+            resetQuiz(level);
+        }
+        function selectOption(option) {
+            var options = option.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(function(el) {
+                el.classList.remove('selected');
+            });
+            option.classList.add('selected');
+        }
+        function checkAnswer(button) {
+            var question = button.parentElement;
+            var selectedOption = question.querySelector('.quiz-option.selected');
+            var correctAnswer = question.getAttribute('data-correct');
+            var options = question.querySelectorAll('.quiz-option');
+            var feedback = question.querySelector('.quiz-feedback');
+            if (!selectedOption) {
+                alert('Por favor selecciona una respuesta');
+                return;
+            }
+            options.forEach(function(option, index) {
+                option.classList.remove('correct', 'incorrect');
+                if (String.fromCharCode(97 + index) === correctAnswer) {
+                    option.classList.add('correct');
+                } else if (option === selectedOption) {
+                    option.classList.add('incorrect');
+                }
+            });
+            feedback.classList.remove('correct', 'incorrect');
+            feedback.classList.add(selectedOption.textContent.trim().charAt(0) === correctAnswer ? 'correct' : 'incorrect');
+            feedback.style.display = "block";
+            options.forEach(function(option) {
+                option.style.pointerEvents = 'none';
+            });
+            button.disabled = true;
+            updateQuizResults(question.closest('.quiz-container'));
+        }
+        function resetQuiz(level) {
+            var quiz = document.getElementById('quiz-' + level);
+            if (!quiz) return;
+            var questions = quiz.querySelectorAll('.quiz-question');
+            questions.forEach(function(question) {
+                var options = question.querySelectorAll('.quiz-option');
+                var feedback = question.querySelector('.quiz-feedback');
+                var checkButton = question.querySelector('.btn-check');
+                options.forEach(function(option) {
+                    option.classList.remove('selected', 'correct', 'incorrect');
+                    option.style.pointerEvents = 'auto';
+                });
+                feedback.className = 'quiz-feedback';
+                feedback.style.display = "none";
+                checkButton.disabled = false;
+            });
+            var res = quiz.querySelector('.quiz-results');
+            if(res) res.style.display = 'none';
+        }
+        function updateQuizResults(quizContainer) {
+            var questions = quizContainer.querySelectorAll('.quiz-question');
+            var totalQuestions = questions.length;
+            var answeredQuestions = 0;
+            var correctAnswers = 0;
+            questions.forEach(function(question) {
+                var selectedOption = question.querySelector('.quiz-option.selected');
+                if (selectedOption) {
+                    answeredQuestions++;
+                    var correctAnswer = question.getAttribute('data-correct');
+                    if (selectedOption.textContent.trim().charAt(0) === correctAnswer) {
+                        correctAnswers++;
+                    }
+                }
+            });
+            if (answeredQuestions === totalQuestions) {
+                var resultsDiv = quizContainer.querySelector('.quiz-results');
+                resultsDiv.style.display = 'block';
+                resultsDiv.innerHTML = 'Resultado: <span style="color:var(--secondary);">' 
+                    + correctAnswers + ' de ' + totalQuestions 
+                    + '</span> correctas (' + Math.round((correctAnswers / totalQuestions) * 100) + '%)';
+            }
+        }
+        // Floating Help
+        function showHelpModal() {
+            document.getElementById('help-modal').style.display = 'flex';
+        }
+        function closeHelpModal() {
+            document.getElementById('help-modal').style.display = 'none';
+        }
+        // Improve touch for mobile: close modal on outside click
+        document.getElementById('help-modal').addEventListener('click', function(e){
+            if(e.target === this){ closeHelpModal(); }
+        });
+    </script>
+</body>
+</html>
