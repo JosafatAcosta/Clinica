@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Didáctica: TLP, Bipolaridad y Ciclotimia</title>
+    <meta name="description" content="Página didáctica interactiva sobre Trastorno Límite de Personalidad, Trastorno Bipolar y Ciclotimia según DSM-5-TR.">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #dbeafe 0%, #f1f5f9 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        header {
+            background: linear-gradient(90deg, #2563eb 60%, #4a6fa5 100%);
+            color: #fff;
+            padding: 30px 15px 20px 15px;
+            text-align: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+        }
+        h1 {
+            margin: 0 0 7px 0;
+            font-size: 2.1em;
+            letter-spacing: 1px;
+        }
+        .menu-section {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 35px 0 15px 0;
+            flex-wrap: wrap;
+        }
+        .menu-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px 0 rgba(10, 60, 140, 0.10);
+            padding: 30px 25px 25px 25px;
+            min-width: 220px;
+            max-width: 340px;
+            flex: 1 1 280px;
+            cursor: pointer;
+            text-align: center;
+            transition: box-shadow 0.25s, transform 0.15s;
+            border: 2px solid transparent;
+        }
+        .menu-card:hover, .menu-card.selected {
+            box-shadow: 0 8px 32px 0 rgba(10, 60, 140, 0.18);
+            transform: translateY(-3px) scale(1.025);
+            border-color: #2563eb;
+        }
+        .menu-icon {
+            font-size: 2.7em;
+            margin-bottom: 13px;
+            color: #2563eb;
+        }
+        .menu-title {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: #222;
+        }
+        .menu-desc {
+            color: #4a6fa5;
+            font-size: 1em;
+            margin-top: 6px;
+            min-height: 36px;
+        }
+        .content-section {
+            display: none;
+            margin: 0 auto;
+            padding: 0 10px 70px 10px;
+            max-width: 950px;
+            animation: fadeIn 0.7s;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .back-btn {
+            display: inline-block;
+            margin: 20px 0 10px 0;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            padding: 9px 22px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .back-btn:hover {
+            background: #1d4ed8;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(35px);}
+            to { opacity: 1; transform: none;}
+        }
+        footer {
+            background: #e5eafe;
+            text-align: center;
+            color: #555;
+            font-size: 0.97em;
+            padding: 23px 8px 17px 8px;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            margin-top: 45px;
+        }
+        .author {
+            display: block;
+            font-style: italic;
+            color: #2563eb;
+            margin-top: 10px;
+            font-size: 1.02em;
+        }
+        /* Responsive Styles */
+        @media (max-width: 900px) {
+            .menu-section {gap: 13px;}
+            .menu-card {min-width: 180px;}
+        }
+        @media (max-width: 650px) {
+            header {padding-bottom: 12px;}
+            h1 {font-size: 1.3em;}
+            .menu-section {flex-direction: column; align-items: center;}
+            .menu-card {width: 95%; max-width: 350px;}
+            .content-section {padding: 0 1vw 60px 1vw;}
+        }
+        @media (max-width: 420px) {
+            .menu-card {padding: 18px 5px;}
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Guía Didáctica Interactiva</h1>
+        <div style="font-size:1.09em;">Trastorno Límite de Personalidad, Trastorno Bipolar y Ciclotimia</div>
+    </header>
+    <main>
+        <!-- MENÚ PRINCIPAL -->
+        <div class="menu-section" id="main-menu">
+            <div class="menu-card" id="btn-tlp">
+                <div class="menu-icon">🧩</div>
+                <div class="menu-title">Trastorno Límite de Personalidad</div>
+                <div class="menu-desc">DSM-5-TR: Criterios, especificadores, videos y ejemplos clínicos.</div>
+            </div>
+            <div class="menu-card" id="btn-bipolar">
+                <div class="menu-icon">🌗</div>
+                <div class="menu-title">Trastorno Bipolar y Ciclotimia</div>
+                <div class="menu-desc">DSM-5-TR: Diagnóstico de Bipolar I, II y Ciclotimia, especificadores y videos.</div>
+            </div>
+        </div>
+        <!-- CONTENIDO TLP -->
+        <div class="content-section" id="tlp-content">
+            <button class="back-btn" onclick="showMenu()">← Volver al menú</button>
+            <!-- Aquí va el contenido original de TLP (puedes copiar/pegar el HTML original aquí) -->
+            <header>
+                <h2 style="margin-top:5px;">Trastorno Límite de Personalidad</h2>
+                <p>DSM-5-TR - Criterios Diagnósticos y Especificadores</p>
+            </header>
+            <div class="section">
+                <h3>Criterios Diagnósticos (DSM-5-TR)</h3>
+                <p>Un patrón general de inestabilidad en las relaciones interpersonales, la autoimagen y los afectos, y una notable impulsividad, que comienza en las primeras etapas de la edad adulta y está presente en diversos contextos, como lo indican cinco (o más) de los siguientes:</p>
+                <div class="criteria-list">
+                    <div class="criteria-item">Esfuerzos frenéticos para evitar un abandono real o imaginado.</div>
+                    <div class="criteria-item">Un patrón de relaciones interpersonales inestables e intensas caracterizado por la alternancia entre los extremos de idealización y devaluación.</div>
+                    <div class="criteria-item">Alteración de la identidad: autoimagen o sentido de sí mismo marcada y persistentemente inestable.</div>
+                    <div class="criteria-item">Impulsividad en al menos dos áreas que son potencialmente autodañinas (ej. gastos, sexo, abuso de sustancias, conducción temeraria, atracones de comida).</div>
+                    <div class="criteria-item">Comportamientos, intentos o amenazas suicidas recurrentes, o comportamiento de automutilación.</div>
+                    <div class="criteria-item">Inestabilidad afectiva debida a una notable reactividad del estado de ánimo (ej. episodios de intensa disforia, irritabilidad o ansiedad, que suelen durar unas horas y rara vez más de unos días).</div>
+                    <div class="criteria-item">Sentimientos crónicos de vacío.</div>
+                    <div class="criteria-item">Ira inapropiada e intensa o dificultades para controlar la ira (ej. muestras frecuentes de mal genio, enfado constante, peleas físicas recurrentes).</div>
+                    <div class="criteria-item">Ideación paranoide transitoria relacionada con el estrés o síntomas disociativos graves.</div>
+                </div>
+            </div>
+            <div class="section">
+                <h3>Criterios Clave</h3>
+                <ul>
+                    <li><strong>Inestabilidad emocional:</strong> Cambios rápidos en el estado de ánimo que pueden durar desde unas horas hasta unos días.</li>
+                    <li><strong>Relaciones intensas e inestables:</strong> Patrón de relaciones "amor-odio" con idealización y devaluación alternantes.</li>
+                    <li><strong>Comportamientos impulsivos:</strong> Conductas autodestructivas sin considerar las consecuencias.</li>
+                    <li><strong>Miedo al abandono:</strong> Reacciones extremas ante separaciones reales o percibidas.</li>
+                    <li><strong>Problemas de identidad:</strong> Autoimagen y objetivos personales marcadamente inestables.</li>
+                </ul>
+            </div>
+            <div class="section">
+                <h3>Especificadores</h3>
+                <div class="specifiers">
+                    <div class="specifier-card">
+                        <h4>Por estado mental</h4>
+                        <p>Con síntomas psicóticos transitorios: Cuando hay ideación paranoide o síntomas disociativos graves durante períodos de estrés extremo.</p>
+                    </div>
+                    <div class="specifier-card">
+                        <h4>Por nivel de gravedad</h4>
+                        <p>Leve: Síntomas limitados que causan deterioro menor.<br>
+                        Moderado: Síntomas numerosos con deterioro funcional significativo.<br>
+                        Grave: Síntomas extensos con grave deterioro y riesgo de autolesión.</p>
+                    </div>
+                    <div class="specifier-card">
+                        <h4>Por patrón predominante</h4>
+                        <p>Con predominio afectivo: Cuando la inestabilidad emocional es el síntoma principal.<br>
+                        Con predominio impulsivo: Cuando las conductas impulsivas son más destacadas.<br>
+                        Con predominio interpersonal: Cuando las dificultades en relaciones son primarias.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h3>Ejemplo Clínico</h3>
+                <p>El siguiente video muestra un ejemplo de comportamiento característico del Trastorno Límite de Personalidad, comenzando en el minuto 5:51 donde se ilustra la inestabilidad emocional y las reacciones intensas.</p>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/lcIR1gb5BeM?start=351" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <p><em>Nota: El video muestra una dramatización de las características del trastorno. Para diagnóstico clínico, se requiere evaluación profesional.</em></p>
+            </div>
+        </div>
+        <!-- CONTENIDO BIPOLAR -->
+        <div class="content-section" id="bipolar-content">
+            <button class="back-btn" onclick="showMenu()">← Volver al menú</button>
+            <header>
+                <h2 style="margin-top:5px;">Trastorno Bipolar y Ciclotimia</h2>
+                <p>DSM-5-TR - Criterios Diagnósticos y Especificadores</p>
+            </header>
+            <div class="section">
+                <h3>Trastorno Bipolar I y II – Criterios Diagnósticos (DSM-5-TR)</h3>
+                <p>Los trastornos bipolares se caracterizan por la presencia de episodios afectivos que incluyen manía, hipomanía y depresión mayor. El diagnóstico requiere la identificación de estos episodios y su impacto en la vida del paciente.</p>
+                <div class="criteria-list">
+                    <div class="criteria-item"><strong>Trastorno Bipolar I:</strong> Al menos un episodio maníaco (puede estar precedido o seguido por episodios depresivos mayores).</div>
+                    <div class="criteria-item"><strong>Episodio maníaco:</strong> Estado de ánimo anormal y persistentemente elevado, expansivo o irritable, con aumento de energía, durante al menos una semana, acompañado de tres (o más) de los siguientes síntomas:
+                        <ul>
+                            <li>Autoestima exagerada o grandiosidad.</li>
+                            <li>Disminución de la necesidad de dormir.</li>
+                            <li>Más locuacidad de lo habitual.</li>
+                            <li>Fuga de ideas o sensación de pensamiento acelerado.</li>
+                            <li>Facilidad de distracción.</li>
+                            <li>Aumento de la actividad dirigida a objetivos o agitación psicomotora.</li>
+                            <li>Participación excesiva en actividades de alto riesgo (compras, inversiones, sexualidad, etc.).</li>
+                        </ul>
+                    </div>
+                    <div class="criteria-item"><strong>Trastorno Bipolar II:</strong> Al menos un episodio hipomaníaco (similar a la manía pero menos grave, al menos 4 días) y al menos un episodio depresivo mayor, sin que haya habido episodio maníaco.</div>
+                    <div class="criteria-item"><strong>Episodio depresivo mayor:</strong> Estado de ánimo deprimido o pérdida de interés/placer casi todo el día, junto con otros síntomas como fatiga, cambios en el apetito, insomnio o hipersomnia, sentimientos de inutilidad o culpa, dificultad para concentrarse, pensamientos de muerte.</div>
+                </div>
+            </div>
+            <div class="section">
+                <h3>Ciclotimia – Criterios Diagnósticos (DSM-5-TR)</h3>
+                <div class="criteria-list">
+                    <div class="criteria-item">Múltiples períodos de síntomas hipomaníacos y depresivos que no cumplen criterios completos para episodios hipomaníacos o depresivos mayores.</div>
+                    <div class="criteria-item">Duración: Al menos 2 años (1 año en niños/adolescentes) de síntomas fluctuantes.</div>
+                    <div class="criteria-item">Durante el período, los síntomas están presentes por lo menos la mitad del tiempo y el paciente no ha estado sin síntomas más de 2 meses seguidos.</div>
+                    <div class="criteria-item">Nunca se han cumplido criterios completos para manía, hipomanía o depresión mayor.</div>
+                    <div class="criteria-item">Los síntomas causan malestar clínicamente significativo o deterioro en lo social, laboral u otras áreas importantes.</div>
+                </div>
+            </div>
+            <div class="section">
+                <h3>Criterios Clave</h3>
+                <ul>
+                    <li><strong>Trastorno Bipolar:</strong> Alternancia de episodios de manía/hipomanía y depresión.</li>
+                    <li><strong>Ciclotimia:</strong> Fluctuaciones crónicas entre síntomas subumbral hipomaníacos y depresivos.</li>
+                    <li><strong>Impacto funcional:</strong> Deterioro variable; en manía puede requerir hospitalización.</li>
+                    <li><strong>Riesgo:</strong> Mayor probabilidad de suicidio, conductas de riesgo en manía.</li>
+                    <li><strong>Inicio:</strong> Generalmente en adolescencia o adultez temprana.</li>
+                </ul>
+            </div>
+            <div class="section">
+                <h3>Especificadores</h3>
+                <div class="specifiers">
+                    <div class="specifier-card">
+                        <h4>Por estado actual</h4>
+                        <p>Con síntomas psicóticos: Presencia de delirios o alucinaciones durante episodios maníacos o depresivos.<br>
+                        Sin síntomas psicóticos: Episodios afectivos sin psicosis.</p>
+                    </div>
+                    <div class="specifier-card">
+                        <h4>Por curso</h4>
+                        <p>
+                            <strong>Con ciclos rápidos:</strong> Cuatro o más episodios de alteración del estado de ánimo en un año.<br>
+                            <strong>Con remisión parcial/completa:</strong> Mejoría sostenida de síntomas.<br>
+                            <strong>Con inicio postparto:</strong> Síntomas comienzan en el período puerperal.
+                        </p>
+                    </div>
+                    <div class="specifier-card">
+                        <h4>Por predominio sintomático</h4>
+                        <p>
+                            <strong>Predominio maníaco/hipomaníaco:</strong> Episodios expansivos o irritables predominan.<br>
+                            <strong>Predominio depresivo:</strong> Episodios depresivos predominan.<br>
+                            <strong>Mixto:</strong> Presencia simultánea de síntomas maníacos y depresivos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h3>Ejemplos Clínicos en Video</h3>
+                <p>A continuación se muestran videos que ejemplifican los cuadros clínicos característicos del Trastorno Bipolar:<br>
+                <strong>Video 1:</strong> Episodio maníaco con signos psicóticos.<br>
+                <strong>Video 2:</strong> Episodio depresivo.</p>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/2cMkmTXTGLo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/NCoi56jgsqY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <p><em>Nota: Los videos muestran dramatizaciones educativas. Para diagnóstico clínico, se requiere evaluación profesional.</em></p>
+            </div>
+        </div>
+    </main>
+    <footer>
+        Guía didáctica basada en los criterios DSM-5-TR - No sustituye el diagnóstico profesional
+        <span class="author">Documento elaborado por: R. Josafat Acosta García</span>
+    </footer>
+    <script>
+        const menu = document.getElementById('main-menu');
+        const tlp = document.getElementById('tlp-content');
+        const bipolar = document.getElementById('bipolar-content');
+        function showMenu() {
+            tlp.classList.remove('active');
+            bipolar.classList.remove('active');
+            menu.style.display = 'flex';
+            // Scrollea arriba al menú al volver
+            window.scrollTo({top:0, behavior:'smooth'});
+        }
+        document.getElementById('btn-tlp').onclick = function() {
+            menu.style.display = 'none';
+            tlp.classList.add('active');
+            bipolar.classList.remove('active');
+            window.scrollTo({top:0, behavior:'smooth'});
+        }
+        document.getElementById('btn-bipolar').onclick = function() {
+            menu.style.display = 'none';
+            bipolar.classList.add('active');
+            tlp.classList.remove('active');
+            window.scrollTo({top:0, behavior:'smooth'});
+        }
+    </script>
+</body>
+</html>
